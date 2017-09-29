@@ -1,0 +1,10 @@
+{
+  "name": "kenga",
+  "version": "0.0.1",
+  "description": "Solid web widgets",
+  "main": "index.js",
+  "repository": "https://github.com/marat-gainullin/kenga.git",
+  "author": "marat-gainullin <mg@altsoft.biz>",
+  "license": "BSD-3-Clause",
+  "private": false
+}
