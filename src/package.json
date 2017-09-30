@@ -2,7 +2,6 @@
   "name": "kenga",
   "version": "0.0.1",
   "description": "Solid web widgets",
-  "files": "lib",
   "main": "widget.js",
   "repository": "https://github.com/marat-gainullin/kenga.git",
   "author": "marat-gainullin <mg@altsoft.biz>",
