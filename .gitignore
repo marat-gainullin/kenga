@@ -17,6 +17,7 @@ hs_err_pid*
 
 # common used build directory
 build
+yarn.lock
 
 # final output directory
 lib

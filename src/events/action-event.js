@@ -1,11 +1,9 @@
-define([
-    'core/extend',
-    '../event'], function(
-        extend,
-        Event){
-    function ActionEvent(w) {
-        Event.call(this, w, w);
+import Event from '../event';
+
+class ActionEvent extends Event {
+    constructor(w) {
+        super(w, w);
     }
-    extend(ActionEvent, Event);
-    return ActionEvent;
-});
+}
+
+export default ActionEvent;

@@ -1,17 +1,17 @@
-define(function () {
-    function Event(source, target, event) {
+class Event {
+    constructor(source, target, event) {
         Object.defineProperty(this, 'event', {
-            get: function () {
+            get: function() {
                 return event;
             }
         });
         Object.defineProperty(this, 'source', {
-            get: function () {
+            get: function() {
                 return source;
             }
         });
         Object.defineProperty(this, 'target', {
-            get: function () {
+            get: function() {
                 if (target && target['p-widget'])
                     return target['p-widget'];
                 else
@@ -19,5 +19,6 @@ define(function () {
             }
         });
     }
-    return Event;
-});
+}
+
+export default Event;

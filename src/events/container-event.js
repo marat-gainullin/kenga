@@ -1,12 +1,14 @@
-define(['../event', 'core/extend'], function(Event, extend){
-    function ContainerEvent(aContainer, aChild) {
-        Event.call(this, aContainer, aChild);
+import Event from '../event';
+
+class ContainerEvent extends Event {
+    constructor(aContainer, aChild) {
+        super(aContainer, aChild);
         Object.defineProperty(this, 'child', {
-            get: function(){
+            get: function() {
                 return aChild;
             }
         });
     }
-    extend(ContainerEvent, Event);
-    return ContainerEvent;
-});
+}
+
+export default ContainerEvent;

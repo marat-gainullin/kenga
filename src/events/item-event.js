@@ -1,17 +1,15 @@
-define([
-    '../event',
-    'core/extend'], function (
-        Event,
-        extend) {
-    function ItemEvent(source, item) {
-        Event.call(this, source, item);
+import Event from '../event';
+
+class ItemEvent extends Event {
+    constructor(source, item) {
+        super(source, item);
 
         Object.defineProperty(this, 'item', {
-            get: function () {
+            get: function() {
                 return item;
             }
         });
     }
-    extend(ItemEvent, Event);
-    return ItemEvent;
-});
+}
+
+export default ItemEvent;

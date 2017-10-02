@@ -1,9 +1,9 @@
 import Event from '../event';
 
-class BlurEvent extends Event {
+class WidgetEvent extends Event {
     constructor(w) {
         super(w, w);
     }
 }
 
-export default BlurEvent;
+export default WidgetEvent;

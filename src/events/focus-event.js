@@ -1,11 +1,9 @@
-define([
-    'core/extend',
-    '../event'], function(
-        extend,
-        Event){
-    function FocusEvent(w) {
-        Event.call(this, w, w);
+import Event from '../event';
+
+class FocusEvent extends Event {
+    constructor(w) {
+        super(w, w);
     }
-    extend(FocusEvent, Event);
-    return FocusEvent;
-});
+}
+
+export default FocusEvent;

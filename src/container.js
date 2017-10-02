@@ -1,28 +1,20 @@
-define([
-    'core/extend',
-    './widget',
-    './events/container-event',
-    'core/invoke',
-    'core/logger'], function (
-        extend,
-        Widget,
-        ContainerEvent,
-        Invoke,
-        Logger) {
-    function Container(shell, content) {
-        if (!shell)
-            shell = document.createElement('div');
-        if (!content)
-            content = shell;
-        Widget.call(this, shell);
-        var self = this;
+import Widget from './widget';
+import ContainerEvent from './events/container-event';
+import Invoke from 'core/invoke';
+import Logger from 'core/logger';
 
-        var children = [];
+class Container extends Widget {
+    constructor(shell = document.createElement('div'), content) {
+        content = content || shell;
+        super(shell);
+        const self = this;
+
+        const children = [];
 
         this.element.classList.add('p-container');
 
         Object.defineProperty(this, 'count', {
-            get: function () {
+            get: function() {
                 return children.length;
             }
         });
@@ -36,17 +28,18 @@ define([
         }
         Object.defineProperty(this, 'child', {
             configurable: true,
-            get: function () {
+            get: function() {
                 return child;
             }
         });
+
         function _children() {
             Logger.warning("'children()' function is obsolete. Use 'count', 'child' and 'forEach' please");
             return children.slice(0, children.length);
         }
         Object.defineProperty(this, 'children', {
             configurable: true,
-            get: function () {
+            get: function() {
                 return _children;
             }
         });
@@ -56,7 +49,7 @@ define([
         }
 
         Object.defineProperty(this, 'forEach', {
-            get: function () {
+            get: function() {
                 return forEach;
             }
         });
@@ -66,7 +59,7 @@ define([
         }
 
         Object.defineProperty(this, 'indexOf', {
-            get: function () {
+            get: function() {
                 return indexOf;
             }
         });
@@ -91,19 +84,19 @@ define([
 
         Object.defineProperty(this, 'add', {
             configurable: true,
-            get: function () {
+            get: function() {
                 return add;
             }
         });
 
         function remove(w) {
-            var idx;
+            let idx;
             if (w instanceof Widget)
                 idx = children.indexOf(w);
             else
                 idx = w;
             if (idx >= 0 && idx < children.length) {
-                var removed = children.splice(idx, 1)[0];
+                const removed = children.splice(idx, 1)[0];
                 removed.parent = null;
                 removed.element.parentElement.removeChild(removed.element);
                 fireRemoved(w);
@@ -115,13 +108,13 @@ define([
 
         Object.defineProperty(this, 'remove', {
             configurable: true,
-            get: function () {
+            get: function() {
                 return remove;
             }
         });
 
         function clear() {
-            children.forEach(function (child) {
+            children.forEach(child => {
                 child.parent = null;
                 child.element.parentElement.removeChild(child.element);
                 fireRemoved(child);
@@ -131,16 +124,17 @@ define([
 
         Object.defineProperty(this, 'clear', {
             configurable: true,
-            get: function () {
+            get: function() {
                 return clear;
             }
         });
 
-        var addHandlers = new Set();
+        const addHandlers = new Set();
+
         function addAddHandler(handler) {
             addHandlers.add(handler);
             return {
-                removeHandler: function () {
+                removeHandler: function() {
                     addHandlers.delete(handler);
                 }
             };
@@ -148,27 +142,27 @@ define([
 
         Object.defineProperty(this, 'addAddHandler', {
             configurable: true,
-            get: function () {
+            get: function() {
                 return addAddHandler;
             }
         });
 
         function fireAdded(w) {
-            var event = new ContainerEvent(self, w);
-            addHandlers.forEach(function (h) {
-                Invoke.later(function () {
+            const event = new ContainerEvent(self, w);
+            addHandlers.forEach(h => {
+                Invoke.later(() => {
                     h(event);
                 });
             });
         }
 
-        var onAdd;
-        var addReg;
+        let onAdd;
+        let addReg;
         Object.defineProperty(this, 'onAdd', {
-            get: function () {
+            get: function() {
                 return onAdd;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (onAdd !== aValue) {
                     if (addReg) {
                         addReg.removeHandler();
@@ -176,7 +170,7 @@ define([
                     }
                     onAdd = aValue;
                     if (onAdd) {
-                        addReg = addAddHandler(function (event) {
+                        addReg = addAddHandler(event => {
                             if (onAdd) {
                                 onAdd(event);
                             }
@@ -186,11 +180,12 @@ define([
             }
         });
 
-        var removeHandlers = new Set();
+        const removeHandlers = new Set();
+
         function addRemoveHandler(handler) {
             removeHandlers.add(handler);
             return {
-                removeHandler: function () {
+                removeHandler: function() {
                     removeHandlers.delete(handler);
                 }
             };
@@ -198,27 +193,27 @@ define([
 
         Object.defineProperty(this, 'addRemoveHandler', {
             configurable: true,
-            get: function () {
+            get: function() {
                 return addRemoveHandler;
             }
         });
 
         function fireRemoved(w) {
-            var event = new ContainerEvent(self, w);
-            removeHandlers.forEach(function (h) {
-                Invoke.later(function () {
+            const event = new ContainerEvent(self, w);
+            removeHandlers.forEach(h => {
+                Invoke.later(() => {
                     h(event);
                 });
             });
         }
 
-        var onRemove;
-        var removeReg;
+        let onRemove;
+        let removeReg;
         Object.defineProperty(this, 'onRemove', {
-            get: function () {
+            get: function() {
                 return onRemove;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (onRemove !== aValue) {
                     if (removeReg) {
                         removeReg.removeHandler();
@@ -226,7 +221,7 @@ define([
                     }
                     onRemove = aValue;
                     if (onRemove) {
-                        removeReg = addRemoveHandler(function (event) {
+                        removeReg = addRemoveHandler(event => {
                             if (onRemove) {
                                 onRemove(event);
                             }
@@ -236,6 +231,6 @@ define([
             }
         });
     }
-    extend(Container, Widget);
-    return Container;
-});
+}
+
+export default Container;

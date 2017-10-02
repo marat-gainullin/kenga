@@ -1,17 +1,19 @@
-define(['../event', 'core/extend'], function(Event, extend){
-    function ValueChangeEvent(w, oldValue, newValue) {
-        Event.call(this, w, w);
+import Event from '../event';
+
+class ValueChangeEvent extends Event {
+    constructor(w, oldValue, newValue) {
+        super(w, w);
         Object.defineProperty(this, 'newValue', {
-            get: function(){
+            get: function() {
                 return newValue;
             }
         });
         Object.defineProperty(this, 'oldValue', {
-            get: function(){
+            get: function() {
                 return oldValue;
             }
         });
     }
-    extend(ValueChangeEvent, Event);
-    return ValueChangeEvent;
-});
+}
+
+export default ValueChangeEvent;
