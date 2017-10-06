@@ -1,7 +1,8 @@
 import Color from './color';
 import Cursor from './cursor';
 import Font from './font';
-import Invoke from 'core/invoke';
+import Invoke from 'septima-utils/invoke';
+
 const global = window;
 const Events = {
     BLUR: 'blur',
@@ -45,30 +46,6 @@ const Events = {
     TOUCHMOVE: 'touchmove',
     TOUCHSTART: 'touchstart'
 };
-
-const throttle = ((() => {
-    let watchdog = null;
-
-    function throttle(action, timeout) {
-        if (arguments.length < 1)
-            throw "Missing throttle 'action' argument";
-        if (arguments.length < 2)
-            throw "Missing throttle 'timeout' argument";
-        if (timeout < 1) // ms
-            action();
-        else {
-            function invoked() {
-                watchdog = null;
-                action();
-            }
-            if (!watchdog) {
-                Invoke.delayed(timeout, invoked);
-                watchdog = invoked;
-            }
-        }
-    }
-    return throttle;
-})());
 
 function absoluteLeft(elem) {
     let left = 0;
@@ -256,11 +233,6 @@ Object.defineProperty(module, 'on', {
 Object.defineProperty(module, 'Events', {
     get: function() {
         return Events;
-    }
-});
-Object.defineProperty(module, 'throttle', {
-    get: function() {
-        return throttle;
     }
 });
 Object.defineProperty(module, 'absoluteLeft', {

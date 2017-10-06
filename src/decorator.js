@@ -1,4 +1,4 @@
-import Ui from 'ui/utils';
+import Ui from './utils';
 
 function Decorator() {
     const self = this;

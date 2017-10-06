@@ -1,8 +1,8 @@
-import Ui from 'ui/utils';
+import Invoke from 'septima-utils/invoke';
+import Ui from './utils';
 import MouseEvent from './events/mouse-event';
 import WidgetEvent from './events/widget-event';
 import ActionEvent from './events/action-event';
-import Invoke from 'core/invoke';
 
 class Widget {
     constructor(box, shell) {

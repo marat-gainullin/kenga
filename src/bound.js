@@ -1,5 +1,5 @@
-const addListenerName = "-platypus-listener-add-func";
-const removeListenerName = "-platypus-listener-remove-func";
+const addListenerName = "-kenga-listener-add-func";
+const removeListenerName = "-kenga-listener-remove-func";
 
 function listen(aTarget, aListener) {
     const addListener = aTarget[addListenerName];
@@ -76,7 +76,7 @@ function observeElements(target, propListener) {
     };
 }
 
-function observePath(aTarget, aPath, aPropListener) {
+function observePath(target, path, propListener) {
     function subscribe(aData, aListener, aPropName) {
         const listenReg = listen(aData, aChange => {
             if (!aPropName || aChange.propertyName === aPropName) {
@@ -91,25 +91,27 @@ function observePath(aTarget, aPath, aPropListener) {
     }
     let subscribed = [];
 
+    const pathRebinder = evt => {
+        subscribed.forEach(aEntry => {
+            aEntry();
+        });
+        listenPath();
+        const pathDatum = getPathData(target, path);
+        propListener({
+            source: target,
+            propertyName: path,
+            oldValue: pathDatum,
+            newValue: pathDatum
+        });
+    };
+
     function listenPath() {
         subscribed = [];
-        let data = aTarget;
-        const path = aPath.split('.');
-        for (let i = 0; i < path.length; i++) {
-            const propName = path[i];
-            const listener = i === path.length - 1 ? aPropListener : evt => {
-                subscribed.forEach(aEntry => {
-                    aEntry();
-                });
-                listenPath();
-                const pathDatum = getPathData(aTarget, aPath);
-                aPropListener({
-                    source: aTarget,
-                    propertyName: aPath,
-                    oldValue: pathDatum,
-                    newValue: pathDatum
-                });
-            };
+        let data = target;
+        const pathItems = path.split('.');
+        for (let i = 0; i < pathItems.length; i++) {
+            const propName = pathItems[i];
+            const listener = i === pathItems.length - 1 ? propListener : pathRebinder;
             const cookie = subscribe(data, listener, propName);
             if (cookie) {
                 subscribed.push(cookie);
@@ -122,7 +124,7 @@ function observePath(aTarget, aPath, aPropListener) {
             }
         }
     }
-    if (aTarget) {
+    if (target) {
         listenPath();
     }
     return {

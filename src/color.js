@@ -5,7 +5,7 @@ const rgbaPattern = /^\s*rgba\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*,\
 function parse(colorText) {
     if (colorText) {
         if (colorText.startsWith("#")) {
-            var colorText = colorText.substring(1);
+            colorText = colorText.substring(1);
             if (colorText.length === 3) {
                 return {
                     red: parseInt(colorText.substring(0, 1) + colorText.substring(0, 1), 16),
@@ -102,13 +102,13 @@ class Color {
         self.toStyled = () => `rgba(${self.red},${self.green},${self.blue},${self.alpha / 255.0})`;
 
         self.toString = () => {
-            let sred = (new Number(self.red)).toString(16);
+            let sred = self.red.toString(16);
             if (sred.length === 1)
                 sred = `0${sred}`;
-            let sgreen = (new Number(self.green)).toString(16);
+            let sgreen = self.green.toString(16);
             if (sgreen.length === 1)
                 sgreen = `0${sgreen}`;
-            let sblue = (new Number(self.blue)).toString(16);
+            let sblue = self.blue.toString(16);
             if (sblue.length === 1)
                 sblue = `0${sblue}`;
             return `#${sred}${sgreen}${sblue}`;

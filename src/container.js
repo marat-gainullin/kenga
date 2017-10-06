@@ -1,11 +1,10 @@
 import Widget from './widget';
 import ContainerEvent from './events/container-event';
-import Invoke from 'core/invoke';
-import Logger from 'core/logger';
+import Invoke from 'septima-utils/invoke';
+import Logger from 'septima-utils/logger';
 
 class Container extends Widget {
-    constructor(shell = document.createElement('div'), content) {
-        content = content || shell;
+    constructor(shell = document.createElement('div'), content = shell) {
         super(shell);
         const self = this;
 

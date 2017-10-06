@@ -1,5 +1,5 @@
-import Ui from 'ui/utils';
-import Invoke from 'core/invoke';
+import Ui from './utils';
+import Invoke from 'septima-utils/invoke';
 import Widget from './widget';
 import ValueChangeEvent from './events/value-change-event';
 import FocusEvent from './events/focus-event';

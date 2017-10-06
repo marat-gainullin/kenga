@@ -15,12 +15,12 @@ class MouseEvent extends Event {
         });
         Object.defineProperty(this, "screenX", {
             get: function() {
-                event.screenX;
+                return event.screenX;
             }
         });
         Object.defineProperty(this, "screenY", {
             get: function() {
-                event.screenY;
+                return event.screenY;
             }
         });
         Object.defineProperty(this, "altDown", {

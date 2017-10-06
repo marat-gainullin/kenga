@@ -1,6 +1,11 @@
 /* global expect */
 /* global NaN */
 
+import '../src/layout.css';
+import '../src/theme.css';
+import Widget from '../src/widget';
+import Id from 'septima-utils/id';
+
 function expectValue(obj, prop, value) {
     obj[prop] = value;
     expect(obj[prop]).toEqual(value);
@@ -10,7 +15,6 @@ function expectWidget(widget, Font, Color, Cursor) {
     expect('name' in widget).toBeTruthy();
     expectValue(widget, 'name', 'widgetName');
     expect('element' in widget).toBeTruthy();
-    expect('component' in widget).toBeTruthy();
     expect('parent' in widget).toBeTruthy();
     expectValue(widget, 'parent', new widget.constructor());
     expectValue(widget, 'parent', null);
@@ -44,8 +48,6 @@ function expectWidget(widget, Font, Color, Cursor) {
     expectValue(widget, 'contextMenu', new widget.constructor());
     expect('toolTipText' in widget).toBeTruthy();
     expectValue(widget, 'toolTipText', ' sample tooltip');
-    expect('nextFocusableComponent' in widget).toBeTruthy();
-    expectValue(widget, 'nextFocusableComponent', new widget.constructor());
     expect('focusable' in widget).toBeTruthy();
     expectValue(widget, 'focusable', true);
     expectValue(widget, 'focusable', false);
@@ -88,3 +90,6 @@ function expectWidget(widget, Font, Color, Cursor) {
     expect('onKeyPressed' in widget).toBeTruthy();
     expectValue(widget, 'onKeyPressed', function () {});
 }
+
+describe('Kenga Api', () => {
+});
