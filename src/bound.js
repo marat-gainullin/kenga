@@ -1,12 +1,12 @@
-const addListenerName = "-kenga-listener-add-func";
-const removeListenerName = "-kenga-listener-remove-func";
+const addListenerName = '-septima-listener-add-func';
+const removeListenerName = '-septima-listener-remove-func';
 
-function listen(aTarget, aListener) {
-    const addListener = aTarget[addListenerName];
+function listen(target, listener) {
+    const addListener = target[addListenerName];
     if (addListener) {
-        addListener(aListener);
+        addListener(listener);
         return () => {
-            aTarget[removeListenerName](aListener);
+            target[removeListenerName](listener);
         };
     } else {
         return null;
@@ -221,7 +221,7 @@ function Bound() {
 }
 
 class PathComparator {
-    constructor(field, ascending = true) {
+    constructor(path, ascending = true, caseSensitive = false) {
         Object.defineProperty(this, 'ascending', {
             get: function () {
                 return ascending;
@@ -235,10 +235,12 @@ class PathComparator {
                 return 1;
             else if (od2 == null)
                 return -1;
-            if (typeof od1 === 'string')
-                od1 = od1.toLowerCase();
-            if (typeof od2 === 'string')
-                od2 = od2.toLowerCase();
+            if (!caseSensitive) {
+                if (typeof od1 === 'string')
+                    od1 = od1.toLowerCase();
+                if (typeof od2 === 'string')
+                    od2 = od2.toLowerCase();
+            }
             if (od1 === od2)
                 return 0;
             else if (od1 > od2)
@@ -248,8 +250,8 @@ class PathComparator {
         }
 
         function compare(o1, o2) {
-            const oData1 = Bound.getPathData(o1, field);
-            const oData2 = Bound.getPathData(o2, field);
+            const oData1 = Bound.getPathData(o1, path);
+            const oData2 = Bound.getPathData(o2, path);
             const res = oCompare(oData1, oData2);
             return ascending ? res : -res;
         }

@@ -4,8 +4,11 @@ import Invoke from 'septima-utils/invoke';
 import Logger from 'septima-utils/logger';
 
 class Container extends Widget {
-    constructor(shell = document.createElement('div'), content = shell) {
+    constructor(shell, content) {
+        shell = shell || document.createElement('div');
+        content = content || shell;
         super(shell);
+        
         const self = this;
 
         const children = [];

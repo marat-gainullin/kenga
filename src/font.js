@@ -6,31 +6,31 @@ const Style = {
 };
 
 class Font {
-    constructor(aFamily, aStyle, aSize) {
+    constructor(family, style, size) {
         const self = this;
-        Object.defineProperty(self, "family", {
+        Object.defineProperty(self, 'family', {
             get: function() {
-                return aFamily;
+                return family;
             }
         });
-        Object.defineProperty(self, "style", {
+        Object.defineProperty(self, 'style', {
             get: function() {
-                return aStyle;
+                return style;
             }
         });
-        Object.defineProperty(self, "size", {
+        Object.defineProperty(self, 'size', {
             get: function() {
-                return aSize;
+                return size;
             }
         });
-        Object.defineProperty(self, "bold", {
+        Object.defineProperty(self, 'bold', {
             get: function() {
-                return aStyle === Style.BOLD || aStyle === Style.BOLD_ITALIC;
+                return style === Style.BOLD || style === Style.BOLD_ITALIC;
             }
         });
-        Object.defineProperty(self, "italic", {
+        Object.defineProperty(self, 'italic', {
             get: function() {
-                return Style === Style.ITALIC || aStyle === Style.BOLD_ITALIC;
+                return Style === Style.ITALIC || style === Style.BOLD_ITALIC;
             }
         });
     }

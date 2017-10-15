@@ -1,11 +1,11 @@
 import Event from '../event';
 
 class ContainerEvent extends Event {
-    constructor(aContainer, aChild) {
-        super(aContainer, aChild);
+    constructor(container, child) {
+        super(container, child);
         Object.defineProperty(this, 'child', {
             get: function() {
-                return aChild;
+                return child;
             }
         });
     }

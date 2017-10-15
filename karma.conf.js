@@ -3,11 +3,18 @@ module.exports = function (config) {
         basePath: '.',
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['browserify', 'jasmine'],
+        /*
+        client: {
+            jasmine: {
+                random: true
+            }
+        },
+        */
         // list of files / patterns to load in the browser
         files: [
             'src/**/*.js',
             'test/**/*.js',
-            'assets/**/*.*'
+            { pattern: 'assets/**/*.*', included: false }
         ],
         // list of files to exclude
         exclude: [
@@ -20,6 +27,7 @@ module.exports = function (config) {
         },
         browserify: {
             debug: true,
+            extensions: ['.js'],
             bundleDelay: 1000,
             transform: [
                 [
@@ -31,11 +39,13 @@ module.exports = function (config) {
                     'browserify-css', {
                         inlineImages: true
                     }
-                ],
-                ['browserify-babel-istanbul']
-            ],
-            extensions: ['.js']
+                ]
+                ,['browserify-babel-istanbul']
+            ]
         },
+        // Continuous Integration mode
+        // if true, Karma captures browsers, runs the tests and exits
+        singleRun: true,
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
@@ -63,9 +73,6 @@ module.exports = function (config) {
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: ['Chrome'],
-        // Continuous Integration mode
-        // if true, Karma captures browsers, runs the tests and exits
-        singleRun: true,
         // Concurrency level
         // how many browser should be started simultaneous
         concurrency: Infinity
