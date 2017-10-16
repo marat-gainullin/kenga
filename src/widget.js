@@ -6,8 +6,7 @@ import ActionEvent from './events/action-event';
 
 class Widget {
     constructor(box, shell) {
-        if (!(this instanceof Widget))
-            throw 'Use new with this constructor function';
+        
         box = box || document.createElement('div');
         shell = shell || box;
 
@@ -149,8 +148,10 @@ class Widget {
                 return foreground;
             },
             set: function (aValue) {
-                foreground = aValue;
-                box.style.color = foreground && foreground.toStyled ? foreground.toStyled() : foreground;
+                if (foreground !== aValue) {
+                    foreground = aValue;
+                    box.style.color = foreground && foreground.toStyled ? foreground.toStyled() : foreground;
+                }
             }
         });
         Object.defineProperty(this, 'cursor', {
@@ -351,7 +352,7 @@ class Widget {
             };
         }
 
-        function fireActionPerformed() {
+        function fireAction() {
             const event = new ActionEvent(self);
             actionHandlers.forEach(h => {
                 Invoke.later(() => {
@@ -397,13 +398,13 @@ class Widget {
             };
         }
 
-        function addMouseDownHandler(handler) {
+        function addMousePressHandler(h) {
             return Ui.on(shell, Ui.Events.MOUSEDOWN, evt => {
-                handler(new MouseEvent(self, evt));
+                h(new MouseEvent(self, evt));
             });
         }
 
-        function addMouseUpHandler(handler) {
+        function addMouseReleaseHandler(handler) {
             return Ui.on(shell, Ui.Events.MOUSEUP, evt => {
                 handler(new MouseEvent(self, evt));
             });
@@ -454,14 +455,14 @@ class Widget {
                 return addMouseClickHandler;
             }
         });
-        Object.defineProperty(this, 'addMouseDownHandler', {
+        Object.defineProperty(this, 'addMousePressHandler', {
             get: function () {
-                return addMouseDownHandler;
+                return addMousePressHandler;
             }
         });
-        Object.defineProperty(this, 'addMouseUpHandler', {
+        Object.defineProperty(this, 'addMouseReleaseHandler', {
             get: function () {
-                return addMouseUpHandler;
+                return addMouseReleaseHandler;
             }
         });
         Object.defineProperty(this, 'addMouseMoveHandler', {
@@ -485,9 +486,9 @@ class Widget {
             }
         });
 
-        Object.defineProperty(this, 'fireActionPerformed', {
+        Object.defineProperty(this, 'fireAction', {
             get: function () {
-                return fireActionPerformed;
+                return fireAction;
             }
         });
 
@@ -561,32 +562,23 @@ class Widget {
             });
         }
 
-        const MOUSESTATE = {
-            NULL: {},
-            PRESSED: {},
-            MOVED: {},
-            DRAGGED: {}
-        };
-
-        let mouseState = MOUSESTATE.NULL;
-
-        let onActionPerformed;
-        let actionPerformedReg;
-        Object.defineProperty(this, 'onActionPerformed', {
+        let onAction;
+        let actionReg;
+        Object.defineProperty(this, 'onAction', {
             get: function () {
-                return onActionPerformed;
+                return onAction;
             },
             set: function (aValue) {
-                if (onActionPerformed !== aValue) {
-                    if (actionPerformedReg) {
-                        actionPerformedReg.removeHandler();
-                        actionPerformedReg = null;
+                if (onAction !== aValue) {
+                    if (actionReg) {
+                        actionReg.removeHandler();
+                        actionReg = null;
                     }
-                    onActionPerformed = aValue;
-                    if (onActionPerformed) {
-                        actionPerformedReg = self.addActionHandler(event => {
-                            if (onActionPerformed) {
-                                onActionPerformed(event);
+                    onAction = aValue;
+                    if (onAction) {
+                        actionReg = self.addActionHandler(event => {
+                            if (onAction) {
+                                onAction(event);
                             }
                         });
                     }
@@ -594,168 +586,168 @@ class Widget {
             }
         });
 
-        let onMouseExited;
+        let onMouseExit;
         let mouseOutReg;
-        Object.defineProperty(this, 'onMouseExited', {
+        Object.defineProperty(this, 'onMouseExit', {
             get: function () {
-                return onMouseExited;
+                return onMouseExit;
             },
             set: function (aValue) {
-                if (onMouseExited !== aValue) {
+                if (onMouseExit !== aValue) {
                     if (mouseOutReg) {
                         mouseOutReg.removeHandler();
                         mouseOutReg = null;
                     }
-                    onMouseExited = aValue;
-                    if (onMouseExited) {
+                    onMouseExit = aValue;
+                    if (onMouseExit) {
                         mouseOutReg = addMouseExitHandler(evt => {
-                            if (onMouseExited) {
+                            if (onMouseExit) {
                                 evt.event.stopPropagation();
-                                onMouseExited(evt);
+                                onMouseExit(evt);
                             }
                         });
                     }
                 }
             }
         });
-        let onMouseClicked;
-        let mouseClickedReg;
-        Object.defineProperty(this, 'onMouseClicked', {
+        let onMouseClick;
+        let mouseClickReg;
+        Object.defineProperty(this, 'onMouseClick', {
             get: function () {
-                return onMouseClicked;
+                return onMouseClick;
             },
             set: function (aValue) {
-                if (onMouseClicked !== aValue) {
-                    if (mouseClickedReg) {
-                        mouseClickedReg.removeHandler();
-                        mouseClickedReg = null;
+                if (onMouseClick !== aValue) {
+                    if (mouseClickReg) {
+                        mouseClickReg.removeHandler();
+                        mouseClickReg = null;
                     }
-                    onMouseClicked = aValue;
-                    if (onMouseClicked) {
-                        mouseClickedReg = addMouseClickHandler(evt => {
-                            if (onMouseClicked) {
+                    onMouseClick = aValue;
+                    if (onMouseClick) {
+                        mouseClickReg = addMouseClickHandler(evt => {
+                            if (onMouseClick) {
                                 evt.event.stopPropagation();
-                                onMouseClicked(evt);
+                                onMouseClick(evt);
                             }
                         });
                     }
                 }
             }
         });
-        let onMousePressed;
-        let mouseDownReg;
-        Object.defineProperty(this, 'onMousePressed', {
+        let onMousePress;
+        let mousePressReg;
+        Object.defineProperty(this, 'onMousePress', {
             get: function () {
-                return onMousePressed;
+                return onMousePress;
             },
             set: function (aValue) {
-                if (onMousePressed !== aValue) {
-                    if (mouseDownReg) {
-                        mouseDownReg.removeHandler();
-                        mouseDownReg = null;
+                if (onMousePress !== aValue) {
+                    if (mousePressReg) {
+                        mousePressReg.removeHandler();
+                        mousePressReg = null;
                     }
-                    onMousePressed = aValue;
-                    if (onMousePressed) {
-                        mouseDownReg = addMouseDownHandler(evt => {
-                            if (onMousePressed) {
+                    onMousePress = aValue;
+                    if (onMousePress) {
+                        mousePressReg = addMousePressHandler(evt => {
+                            if (onMousePress) {
                                 evt.event.stopPropagation();
-                                onMousePressed(evt);
+                                onMousePress(evt);
                             }
                         });
                     }
                 }
             }
         });
-        let onMouseReleased;
-        let mouseUpReg;
-        Object.defineProperty(this, 'onMouseReleased', {
+        let onMouseRelease;
+        let mouseReleaseReg;
+        Object.defineProperty(this, 'onMouseRelease', {
             get: function () {
-                return onMouseReleased;
+                return onMouseRelease;
             },
             set: function (aValue) {
-                if (onMouseReleased !== aValue) {
-                    if (mouseUpReg) {
-                        mouseUpReg.removeHandler();
-                        mouseUpReg = null;
+                if (onMouseRelease !== aValue) {
+                    if (mouseReleaseReg) {
+                        mouseReleaseReg.removeHandler();
+                        mouseReleaseReg = null;
                     }
-                    onMouseReleased = aValue;
-                    if (onMouseReleased) {
-                        mouseUpReg = addMouseUpHandler(evt => {
-                            if (onMouseReleased) {
+                    onMouseRelease = aValue;
+                    if (onMouseRelease) {
+                        mouseReleaseReg = addMouseReleaseHandler(evt => {
+                            if (onMouseRelease) {
                                 evt.event.stopPropagation();
-                                onMouseReleased(evt);
+                                onMouseRelease(evt);
                             }
                         });
                     }
                 }
             }
         });
-        let onMouseEntered;
-        let mouseOverReg;
-        Object.defineProperty(this, 'onMouseEntered', {
+        let onMouseEnter;
+        let mouseEnterReg;
+        Object.defineProperty(this, 'onMouseEnter', {
             get: function () {
-                return onMouseEntered;
+                return onMouseEnter;
             },
             set: function (aValue) {
-                if (onMouseEntered !== aValue) {
-                    if (mouseOverReg) {
-                        mouseOverReg.removeHandler();
-                        mouseOverReg = null;
+                if (onMouseEnter !== aValue) {
+                    if (mouseEnterReg) {
+                        mouseEnterReg.removeHandler();
+                        mouseEnterReg = null;
                     }
-                    onMouseEntered = aValue;
-                    if (onMouseEntered) {
-                        mouseOverReg = addMouseEnterHandler(evt => {
-                            if (onMouseEntered) {
+                    onMouseEnter = aValue;
+                    if (onMouseEnter) {
+                        mouseEnterReg = addMouseEnterHandler(evt => {
+                            if (onMouseEnter) {
                                 evt.event.stopPropagation();
-                                onMouseEntered(evt);
+                                onMouseEnter(evt);
                             }
                         });
                     }
                 }
             }
         });
-        let onMouseWheelMoved;
+        let onMouseWheelMove;
         let mouseWheelReg;
-        Object.defineProperty(this, 'onMouseWheelMoved', {
+        Object.defineProperty(this, 'onMouseWheelMove', {
             get: function () {
-                return onMouseWheelMoved;
+                return onMouseWheelMove;
             },
             set: function (aValue) {
-                if (onMouseWheelMoved !== aValue) {
+                if (onMouseWheelMove !== aValue) {
                     if (mouseWheelReg) {
                         mouseWheelReg.removeHandler();
                         mouseWheelReg = null;
                     }
-                    onMouseWheelMoved = aValue;
-                    if (onMouseWheelMoved) {
+                    onMouseWheelMove = aValue;
+                    if (onMouseWheelMove) {
                         mouseWheelReg = addMouseWheelHandler(evt => {
-                            if (onMouseWheelMoved) {
+                            if (onMouseWheelMove) {
                                 evt.event.stopPropagation();
-                                onMouseWheelMoved(evt);
+                                onMouseWheelMove(evt);
                             }
                         });
                     }
                 }
             }
         });
-        let onMouseMoved;
+        let onMouseMove;
         let mouseMoveReg;
-        Object.defineProperty(this, 'onMouseMoved', {
+        Object.defineProperty(this, 'onMouseMove', {
             get: function () {
-                return onMouseMoved;
+                return onMouseMove;
             },
             set: function (aValue) {
-                if (onMouseMoved !== aValue) {
+                if (onMouseMove !== aValue) {
                     if (mouseMoveReg) {
                         mouseMoveReg.removeHandler();
                         mouseMoveReg = null;
                     }
-                    onMouseMoved = aValue;
-                    if (onMouseMoved) {
+                    onMouseMove = aValue;
+                    if (onMouseMove) {
                         mouseMoveReg = addMouseMoveHandler(evt => {
-                            if (onMouseMoved) {
+                            if (onMouseMove) {
                                 evt.event.stopPropagation();
-                                onMouseMoved(evt);
+                                onMouseMove(evt);
                             }
                         });
                     }
@@ -763,116 +755,69 @@ class Widget {
 
             }
         });
-        let onMouseDragged;
-        let mouseDownForDragReg;
-        let mouseUpForDragReg;
-        let mouseMoveForDragReg;
-        Object.defineProperty(this, 'onMouseDragged', {
+        let onShow;
+        let showReg;
+        Object.defineProperty(this, 'onShow', {
             get: function () {
-                return onMouseDragged;
+                return onShow;
             },
             set: function (aValue) {
-                if (onMouseDragged !== aValue) {
-                    if (mouseDownForDragReg) {
-                        mouseDownForDragReg.removeHandler();
-                        mouseDownForDragReg = null;
+                if (onShow !== aValue) {
+                    if (showReg) {
+                        showReg.removeHandler();
+                        showReg = null;
                     }
-                    if (mouseUpForDragReg) {
-                        mouseUpForDragReg.removeHandler();
-                        mouseUpForDragReg = null;
-                    }
-                    if (mouseMoveForDragReg) {
-                        mouseMoveForDragReg.removeHandler();
-                        mouseMoveForDragReg = null;
-                    }
-                    onMouseDragged = aValue;
-                    if (onMouseDragged) {
-                        mouseDownForDragReg = addMouseDownHandler(evt => {
-                            // TODO: Check mouse capturing capture using during dragging
-                            mouseState = MOUSESTATE.PRESSED;
-                            onMouseDragged(evt);
-                        });
-                        mouseUpForDragReg = addMouseUpHandler(evt => {
-                            document.releaseCapture();
-                            evt.event.stopPropagation();
-                            mouseState = MOUSESTATE.NULL;
-                        });
-                        mouseMoveForDragReg = addMouseMoveHandler(evt => {
-                            if (onMouseDragged) {
-                                evt.event.stopPropagation();
-                                if (mouseState === MOUSESTATE.PRESSED || mouseState === MOUSESTATE.DRAGGED) {
-                                    mouseState = MOUSESTATE.DRAGGED;
-                                    onMouseDragged(evt);
-                                }
+                    onShow = aValue;
+                    if (onShow) {
+                        showReg = addShowHandler(event => {
+                            if (onShow) {
+                                onShow(event);
                             }
                         });
                     }
                 }
             }
         });
-        let onShown;
-        let shownReg;
-        Object.defineProperty(this, 'onShown', {
+        let onHide;
+        let hideReg;
+        Object.defineProperty(this, 'onHide', {
             get: function () {
-                return onShown;
+                return onHide;
             },
             set: function (aValue) {
-                if (onShown !== aValue) {
-                    if (shownReg) {
-                        shownReg.removeHandler();
-                        shownReg = null;
+                if (onHide !== aValue) {
+                    if (hideReg) {
+                        hideReg.removeHandler();
+                        hideReg = null;
                     }
-                    onShown = aValue;
-                    if (onShown) {
-                        shownReg = addShowHandler(event => {
-                            if (onShown) {
-                                onShown(event);
+                    onHide = aValue;
+                    if (onHide) {
+                        hideReg = addHideHandler(event => {
+                            if (onHide) {
+                                onHide(event);
                             }
                         });
                     }
                 }
             }
         });
-        let onHidden;
-        let hiddenReg;
-        Object.defineProperty(this, 'onHidden', {
-            get: function () {
-                return onHidden;
-            },
-            set: function (aValue) {
-                if (onHidden !== aValue) {
-                    if (hiddenReg) {
-                        hiddenReg.removeHandler();
-                        hiddenReg = null;
-                    }
-                    onHidden = aValue;
-                    if (onHidden) {
-                        hiddenReg = addHideHandler(event => {
-                            if (onHidden) {
-                                onHidden(event);
-                            }
-                        });
-                    }
-                }
-            }
-        });
-        let onFocusGained;
+        let onFocus;
         let focusReg;
-        Object.defineProperty(this, 'onFocusGained', {
+        Object.defineProperty(this, 'onFocus', {
             get: function () {
-                return onFocusGained;
+                return onFocus;
             },
             set: function (aValue) {
-                if (onFocusGained !== aValue) {
+                if (onFocus !== aValue) {
                     if (focusReg) {
                         focusReg.removeHandler();
                         focusReg = null;
                     }
-                    onFocusGained = aValue;
-                    if (onFocusGained && self.addFocusHandler) {
+                    onFocus = aValue;
+                    if (onFocus && self.addFocusHandler) {
                         focusReg = self.addFocusHandler(event => {
-                            if (onFocusGained) {
-                                onFocusGained(event);
+                            if (onFocus) {
+                                onFocus(event);
                             }
                         });
                     }
@@ -880,95 +825,94 @@ class Widget {
             }
         });
         let onFocusLost;
-        let blurReg;
+        let focusLostReg;
         Object.defineProperty(this, 'onFocusLost', {
             get: function () {
                 return onFocusLost;
             },
             set: function (aValue) {
                 if (onFocusLost !== aValue) {
-                    if (blurReg) {
-                        blurReg.removeHandler();
-                        blurReg = null;
+                    if (focusLostReg) {
+                        focusLostReg.removeHandler();
+                        focusLostReg = null;
                     }
                     onFocusLost = aValue;
-                    if (onFocusLost && self.addBlurHandler) {
-                        blurReg = self.addBlurHandler(event => {
+                    if (onFocusLost && self.addFocusLostHandler) {
+                        focusLostReg = self.addFocusLostHandler(event => {
                             if (onFocusLost) {
                                 onFocusLost(event);
                             }
-                            mouseState = MOUSESTATE.NULL;
                         });
                     }
                 }
             }
         });
-        let onKeyTyped;
-        let keyTypedReg;
-        Object.defineProperty(this, 'onKeyTyped', {
+        let onKeyType;
+        let keyTypeReg;
+        Object.defineProperty(this, 'onKeyType', {
             get: function () {
-                return onKeyTyped;
+                return onKeyType;
             },
             set: function (aValue) {
-                if (onKeyTyped !== aValue) {
-                    if (keyTypedReg) {
-                        keyTypedReg.removeHandler();
-                        keyTypedReg = null;
+                if (onKeyType !== aValue) {
+                    if (keyTypeReg) {
+                        keyTypeReg.removeHandler();
+                        keyTypeReg = null;
                     }
-                    onKeyTyped = aValue;
-                    if (onKeyTyped && self.addKeyPressHandler) {
-                        keyTypedReg = self.addKeyPressHandler(event => {
-                            if (onKeyTyped) {
+                    onKeyType = aValue;
+                    if (onKeyType && self.addKeyTypeHandler) {
+                        keyTypeReg = self.addKeyTypeHandler(event => {
+                            if (onKeyType) {
                                 event.event.stopPropagation();
-                                onKeyTyped(event);
+                                onKeyType(event);
                             }
                         });
                     }
                 }
             }
         });
-        let onKeyPressed;
-        let keyDownReg;
-        Object.defineProperty(this, 'onKeyPressed', {
+        let onKeyPress;
+        let keyPressReg;
+        Object.defineProperty(this, 'onKeyPress', {
             get: function () {
-                return onKeyPressed;
+                return onKeyPress;
             },
             set: function (aValue) {
-                if (onKeyPressed !== aValue) {
-                    if (keyDownReg) {
-                        keyDownReg.removeHandler();
-                        keyDownReg = null;
+                if (onKeyPress !== aValue) {
+                    if (keyPressReg) {
+                        keyPressReg.removeHandler();
+                        keyPressReg = null;
                     }
-                    onKeyPressed = aValue;
-                    if (onKeyPressed && self.addKeyDownHandler) {
-                        keyDownReg = self.addKeyDownHandler(event => {
-                            if (onKeyPressed) {
+                    onKeyPress = aValue;
+                    if (onKeyPress && self.addKeyPressHandler) {
+                        keyPressReg = self.addKeyPressHandler(event => {
+                            if (onKeyPress) {
                                 event.getEvent().stopPropagation();
-                                onKeyPressed(event);
+                                onKeyPress(event);
                             }
                         });
                     }
                 }
             }
         });
-        let onKeyReleased;
-        let keyUpReg;
-        Object.defineProperty(this, 'onKeyReleased', {
+        let onKeyRelease;
+        let keyReleaseReg;
+        Object.defineProperty(this, 'onKeyRelease', {
             get: function () {
-                return onKeyReleased;
+                return onKeyRelease;
             },
             set: function (aValue) {
-                if (onKeyReleased !== aValue) {
-                    if (keyUpReg) {
-                        keyUpReg.removeHandler();
-                        keyUpReg = null;
+                if (onKeyRelease !== aValue) {
+                    if (keyReleaseReg) {
+                        keyReleaseReg.removeHandler();
+                        keyReleaseReg = null;
                     }
-                    onKeyReleased = aValue;
-                    if (onKeyReleased && self.addKeyUpHandler) {
-                        keyUpReg = self.addKeyUpHandler(event => {
-                            if (onKeyReleased) {
+                    onKeyRelease = aValue;
+                    if (onKeyRelease && self.addKeyReleaseHandler) {
+                        keyReleaseReg = self.addKeyReleaseHandler(event => {
+                            if (onKeyRelease) {
                                 event.event.stopPropagation();
-                                onKeyReleased(event);
+                                onKeyRelease(event);
                             }
                         });
                     }

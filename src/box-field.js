@@ -34,7 +34,7 @@ class BoxField extends Widget {
         });
 
         const changeReg = Ui.on(box, Ui.Events.CHANGE, evt => {
-            self.fireActionPerformed();
+            self.fireAction();
             box.checkValidity();
             if (self.error)
                 showError();
@@ -127,19 +127,19 @@ class BoxField extends Widget {
             });
         }
 
-        const blurHandlers = new Set();
+        const focusLostHandlers = new Set();
 
-        function addBlurHandler(handler) {
-            blurHandlers.add(handler);
+        function addFocusLostHandler(handler) {
+            focusLostHandlers.add(handler);
             return {
                 removeHandler: function() {
-                    blurHandlers.delete(handler);
+                    focusLostHandlers.delete(handler);
                 }
             };
         }
-        Object.defineProperty(this, 'addBlurHandler', {
+        Object.defineProperty(this, 'addFocusLostHandler', {
             get: function() {
-                return addBlurHandler;
+                return addFocusLostHandler;
             }
         });
 
@@ -147,7 +147,7 @@ class BoxField extends Widget {
 
         function fireBlur() {
             const event = new BlurEvent(self);
-            blurHandlers.forEach(h => {
+            focusLostHandlers.forEach(h => {
                 Invoke.later(() => {
                     h(event);
                 });

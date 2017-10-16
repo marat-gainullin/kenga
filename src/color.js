@@ -52,7 +52,7 @@ function parse(colorText) {
             }
         }
     } else {
-        return null;
+        throw i18n['not.a.color'];
     }
 }
 

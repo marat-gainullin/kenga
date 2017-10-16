@@ -6,7 +6,7 @@ function Decorator() {
     this.element.classList.add('p-decorator');
 
     let nullable = true;
-    let onSelect = null;
+    let selector = null;
 
     const btnClear = document.createElement('div');
     btnClear.className = 'p-decoration p-clear';
@@ -19,7 +19,7 @@ function Decorator() {
     btnSelect.className = 'p-decoration p-select';
     Ui.on(btnSelect, Ui.Events.CLICK, evt => {
         evt.stopPropagation();
-        onSelect.call(self, self);
+        selector.call(self, self);
     });
 
     function redecorate() {
@@ -30,14 +30,14 @@ function Decorator() {
             self.element.removeChild(btnClear);
         if (btnSelect.parentNode === self.element)
             self.element.removeChild(btnSelect);
-        if (nullable && onSelect) {
+        if (nullable && selector) {
             self.element.classList.add('p-decorator-nullable-selectable');
             self.element.appendChild(btnClear);
             self.element.appendChild(btnSelect);
         } else if (nullable) {
             self.element.classList.add('p-decorator-nullable');
             self.element.appendChild(btnClear);
-        } else if (onSelect) {
+        } else if (selector) {
             self.element.classList.add('p-decorator-selectable');
             self.element.appendChild(btnSelect);
         }
@@ -55,13 +55,13 @@ function Decorator() {
             }
         }
     });
-    Object.defineProperty(this, 'onSelect', {
+    Object.defineProperty(this, 'selector', {
         get: function() {
-            return onSelect;
+            return selector;
         },
         set: function(aValue) {
-            if (onSelect !== aValue) {
-                onSelect = aValue;
+            if (selector !== aValue) {
+                selector = aValue;
                 redecorate();
             }
         }

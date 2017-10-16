@@ -182,7 +182,7 @@ function Bound() {
 
     function bind() {
         if (data && path) {
-            boudReg = observePath(data, path, evt => {
+            boundReg = observePath(data, path, evt => {
                 toWidget(evt.newValue);
             });
             toWidget(getPathData(data, path));

@@ -1,9 +1,10 @@
 /* global expect */
-/* global NaN */
+/* global NaN, Promise */
 import '../src/layout.css';
 import '../src/theme.css';
 
 import Id from 'septima-utils/id';
+import Invoke from 'septima-utils/invoke';
 import Managed from 'septima-model/managed';
 import Font from '../src/font';
 import Color from '../src/color';
@@ -22,6 +23,7 @@ import WidgetEvent from '../src/events/widget-event';
 import Bound from '../src/bound';
 import Decorator from '../src/decorator';
 import BoxField from '../src/box-field';
+import Utils from '../src/utils';
 
 function expectValue(obj, prop, value) {
     obj[prop] = value;
@@ -35,6 +37,9 @@ function expectWidget(widget) {
     expect('parent' in widget).toBeTruthy();
     expectValue(widget, 'parent', new widget.constructor());
     expectValue(widget, 'parent', null);
+    expect('title' in widget).toBeTruthy();
+    expectValue(widget, 'title', '2');
+    expectValue(widget, 'title', '1');
     expect('left' in widget).toBeTruthy();
     expectValue(widget, 'left', 30);
     expect('width' in widget).toBeTruthy();
@@ -44,20 +49,37 @@ function expectWidget(widget) {
     expect('height' in widget).toBeTruthy();
     expectValue(widget, 'height', 80);
     expect('enabled' in widget).toBeTruthy();
+    expectValue(widget, 'enabled', false);
+    expectValue(widget, 'enabled', true);
     expectValue(widget, 'enabled', true);
     expectValue(widget, 'enabled', false);
+    expectValue(widget, 'enabled', true);
     expect('visible' in widget).toBeTruthy();
+    expectValue(widget, 'visible', false);
+    expectValue(widget, 'visible', true);
     expectValue(widget, 'visible', true);
     expectValue(widget, 'visible', false);
+    expectValue(widget, 'visible', true);
     expect('opaque' in widget).toBeTruthy();
+    expectValue(widget, 'opaque', false);
+    expectValue(widget, 'opaque', true);
     expectValue(widget, 'opaque', true);
     expectValue(widget, 'opaque', false);
+    expectValue(widget, 'opaque', true);
     expect('cursor' in widget).toBeTruthy();
     expectValue(widget, 'cursor', Cursor.WAIT);
     expect('background' in widget).toBeTruthy();
-    expectValue(widget, 'background', new Color('#fcfcfc'));
+    const bg = new Color('#fcfcfc');
+    expectValue(widget, 'background', bg);
+    expectValue(widget, 'background', bg);
+    expectValue(widget, 'background', '#fcfcfa');
+    expectValue(widget, 'background', null);
     expect('foreground' in widget).toBeTruthy();
-    expectValue(widget, 'foreground', new Color(12, 45, 78, 35));
+    const fg = new Color(12, 45, 78, 35);
+    expectValue(widget, 'foreground', fg);
+    expectValue(widget, 'foreground', fg);
+    expectValue(widget, 'foreground', '#bbb');
+    expectValue(widget, 'foreground', null);
     expect('error' in widget).toBeTruthy();
     expectValue(widget, 'error', 'sample validation message');
     widget.error = null;
@@ -65,76 +87,132 @@ function expectWidget(widget) {
     expectValue(widget, 'contextMenu', new widget.constructor());
     expect('toolTipText' in widget).toBeTruthy();
     expectValue(widget, 'toolTipText', ' sample tooltip');
+    expectValue(widget, 'toolTipText', ' sample tooltip');
+    expect('tabIndex' in widget).toBeTruthy();
+    expectValue(widget, 'tabIndex', 1);
     expect('focusable' in widget).toBeTruthy();
     expectValue(widget, 'focusable', true);
     expectValue(widget, 'focusable', false);
+    expectValue(widget, 'focusable', false);
     expect('font' in widget).toBeDefined();
-    expectValue(widget, 'font', new Font('Arial', Font.Style.ITALIC, 14));
+    const fnt = new Font('Arial', Font.Style.BOLD_ITALIC, 14);
+    expectValue(widget, 'font', fnt);
+    expectValue(widget, 'font', fnt);
+    expectValue(widget, 'font', null);
     expect(widget.focus).toBeDefined();
     expect(typeof widget.focus).toEqual('function');
     widget.focus();
 
-    expect('onShown' in widget).toBeTruthy();
-    expectValue(widget, 'onShown', function () {});
-    expect('onHidden' in widget).toBeTruthy();
-    expectValue(widget, 'onHidden', function () {});
-    expect('onMouseDragged' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseDragged', function () {});
-    expect('onMouseReleased' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseReleased', function () {});
+    expect('onShow' in widget).toBeTruthy();
+    expectValue(widget, 'onShow', function () {});
+    expectValue(widget, 'onShow', null);
+    expect('onHide' in widget).toBeTruthy();
+    expectValue(widget, 'onHide', function () {});
+    expectValue(widget, 'onHide', null);
+    expect('onMouseRelease' in widget).toBeTruthy();
+    expectValue(widget, 'onMouseRelease', function () {});
+    expectValue(widget, 'onMouseRelease', null);
     expect('onFocusLost' in widget).toBeTruthy();
     expectValue(widget, 'onFocusLost', function () {});
-    expect('onMousePressed' in widget).toBeTruthy();
-    expectValue(widget, 'onMousePressed', function () {});
-    expect('onMouseEntered' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseEntered', function () {});
-    expect('onMouseMoved' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseMoved', function () {});
-    expect('onActionPerformed' in widget).toBeTruthy();
-    expectValue(widget, 'onActionPerformed', function () {});
-    expect('onKeyReleased' in widget).toBeTruthy();
-    expectValue(widget, 'onKeyReleased', function () {});
-    expect('onKeyTyped' in widget).toBeTruthy();
-    expectValue(widget, 'onKeyTyped', function () {});
-    expect('onMouseWheelMoved' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseWheelMoved', function () {});
-    expect('onFocusGained' in widget).toBeTruthy();
-    expectValue(widget, 'onFocusGained', function () {});
-    expect('onMouseClicked' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseClicked', function () {});
-    expect('onMouseExited' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseExited', function () {});
-    expect('onKeyPressed' in widget).toBeTruthy();
-    expectValue(widget, 'onKeyPressed', function () {});
+    expectValue(widget, 'onFocusLost', null);
+    expect('onMousePress' in widget).toBeTruthy();
+    expectValue(widget, 'onMousePress', function () {});
+    expectValue(widget, 'onMousePress', null);
+    expect('onMouseEnter' in widget).toBeTruthy();
+    expectValue(widget, 'onMouseEnter', function () {});
+    expectValue(widget, 'onMouseEnter', null);
+    expect('onMouseMove' in widget).toBeTruthy();
+    expectValue(widget, 'onMouseMove', function () {});
+    expectValue(widget, 'onMouseMove', null);
+    expect('onAction' in widget).toBeTruthy();
+    expectValue(widget, 'onAction', function () {});
+    expectValue(widget, 'onAction', null);
+    expect('onKeyRelease' in widget).toBeTruthy();
+    expectValue(widget, 'onKeyRelease', function () {});
+    expectValue(widget, 'onKeyRelease', null);
+    expect('onKeyType' in widget).toBeTruthy();
+    expectValue(widget, 'onKeyType', function () {});
+    expectValue(widget, 'onKeyType', null);
+    expect('onMouseWheelMove' in widget).toBeTruthy();
+    expectValue(widget, 'onMouseWheelMove', function () {});
+    expectValue(widget, 'onMouseWheelMove', null);
+    expect('onFocus' in widget).toBeTruthy();
+    expectValue(widget, 'onFocus', function () {});
+    expectValue(widget, 'onFocus', null);
+    expect('onMouseClick' in widget).toBeTruthy();
+    expectValue(widget, 'onMouseClick', function () {});
+    expectValue(widget, 'onMouseClick', null);
+    expect('onMouseExit' in widget).toBeTruthy();
+    expectValue(widget, 'onMouseExit', function () {});
+    expectValue(widget, 'onMouseExit', null);
+    expect('onKeyPress' in widget).toBeTruthy();
+    expectValue(widget, 'onKeyPress', function () {});
+    expectValue(widget, 'onKeyPress', null);
 }
 
 describe('Kenga Api', () => {
-    it('Color Api', () => {
+    it('Color Api', (done) => {
         const c1 = new Color('#ccc');
         expect(c1.red).toEqual(204);
         expect(c1.green).toEqual(204);
         expect(c1.blue).toEqual(204);
         expect(c1.alpha).toEqual(255);
+        expect(c1 + '').toEqual('#cccccc');
         const c2 = new Color('rgb(12, 23, 34)');
         expect(c2.red).toEqual(12);
         expect(c2.green).toEqual(23);
         expect(c2.blue).toEqual(34);
         expect(c2.alpha).toEqual(255);
+        expect(c2 + '').toEqual('#0c1722');
         const c22 = new Color(12, 23, 34);
         expect(c22.red).toEqual(12);
         expect(c22.green).toEqual(23);
         expect(c22.blue).toEqual(34);
         expect(c22.alpha).toEqual(255);
+        expect(c22 + '').toEqual('#0c1722');
         const c3 = new Color('rgba(12, 23, 34, .5)');
         expect(c3.red).toEqual(12);
         expect(c3.green).toEqual(23);
         expect(c3.blue).toEqual(34);
         expect(c3.alpha).toEqual(127);
+        expect(c3 + '').toEqual('#0c1722');
         const c33 = new Color(12, 23, 34, 45);
         expect(c33.red).toEqual(12);
         expect(c33.green).toEqual(23);
         expect(c33.blue).toEqual(34);
         expect(c33.alpha).toEqual(45);
+        expect(c33 + '').toEqual('#0c1722');
+        try {
+            new Color('kjsdhfkjdsh');
+            done.fail();
+        } catch (e) {
+            expect(e).toBeDefined();
+        }
+        try {
+            new Color(78, 34);
+            done.fail();
+        } catch (e) {
+            expect(e).toBeDefined();
+        }
+        try {
+            Color.parse();
+            done.fail();
+        } catch (e) {
+            expect(e).toBeDefined();
+        }
+        try {
+            Color.parse('');
+            done.fail();
+        } catch (e) {
+            expect(e).toBeDefined();
+        }
+        try {
+            Color.parse('#fc');
+            done.fail();
+        } catch (e) {
+            expect(e).toBeDefined();
+        }
+        done();
     });
     it('Events Api', () => {
         const widget = new Widget();
@@ -303,6 +381,53 @@ describe('Kenga Api', () => {
         ]);
     });
 
+    it('Box.Shell', (done) => {
+        const box = document.createElement('input');
+        const shell = document.createElement('div');
+        const field = new BoxField(box, shell);
+        expect(field.element).toBe(shell);
+        field.left += 56;
+        field.top += 6;
+        field.width += 30;
+        field.height += 10;
+        document.body.appendChild(field.element);
+        Promise.resolve().then(() => {
+            field.left += 56;
+            field.top += 6;
+            field.width += 30;
+            field.height += 10;
+            document.body.removeChild(field.element);
+            done();
+        });
+    });
+
+    it('Box.Structure', (done) => {
+        const field = new BoxField();
+        expect(field.element).toBeDefined();
+        const oldVisibleDisplay = field.visibleDisplay;
+        field.visibleDisplay = 'none';
+        field.visibleDisplay = oldVisibleDisplay;
+        field.emptyText = 'Provide data please...';
+        field.tabIndex = 2;
+        const focusReg = field.addFocusHandler(() => {
+        });
+        const focusLostReg = field.addFocusLostHandler(() => {
+        });
+        document.body.appendChild(field.element);
+        Promise.resolve()
+                .then(() => {
+                    field.focus();
+                })
+                .then(() => {
+                    field.blur();
+                })
+                .then(() => {
+                    focusReg.removeHandler();
+                    focusLostReg.removeHandler();
+                    done();
+                });
+    });
+
     class Field extends BoxField {
         constructor(text, box, shell) {
             if (arguments.length < 1)
@@ -366,4 +491,144 @@ describe('Kenga Api', () => {
             Decorator.call(this);
         }
     }
+
+    it('ModelField', (done) => {
+        const data = {
+            path: {
+                name: 'Merilin'
+            }
+        };
+        Managed.listenable(data);
+        Managed.listenable(data.path);
+
+        const widget = new ModelField();
+        widget.nullable = true;
+        widget.nullable = false;
+        widget.selector = () => {
+        };
+        widget.selector = null;
+        widget.data = data;
+        widget.field = 'path.name';
+        expect(widget.value).toEqual('Merilin');
+
+        data.path.name += '_';
+        Managed.fire(data.path, {propertyName: 'name', oldValue: 'Merilin', newValue: 'Merilin_'});
+        expect(data.path.name).toEqual('Merilin_');
+        expect(widget.value).toEqual('Merilin_');
+
+        widget.onValueChange = () => {
+        };
+        widget.onValueChange = () => {
+        };
+        widget.value += '|';
+
+        widget.addFocusHandler(() => {
+        });
+        widget.addFocusLostHandler(() => {
+        });
+        widget.focus();
+        widget.blur();
+        Invoke.later(() => {
+            expect(data.path.name).toEqual('Merilin_|');
+            done();
+        });
+    });
+
+    function expectContainer(container) {
+        expectWidget(container);
+        // Structure
+        expect('count' in container).toBeTruthy();
+        expect(container.add).toBeDefined();
+        expect(typeof container.add).toEqual('function');
+        expect(container.remove).toBeDefined();
+        expect(typeof container.remove).toEqual('function');
+        expect(container.clear).toBeDefined();
+        expect(typeof container.clear).toEqual('function');
+        expect(container.children).toBeDefined();
+        expect(typeof container.children).toEqual('function');
+        expect(container.child).toBeDefined();
+        expect(typeof container.child).toEqual('function');
+        expect('onAdd' in container).toBeTruthy();
+        expectValue(container, 'onAdd', () => {
+        });
+        expect('onRemove' in container).toBeTruthy();
+        expectValue(container, 'onRemove', () => {
+        });
+    }
+
+    it('Container.Structure', () => {
+        const container = new Container();
+        expectContainer(container);
+        expect(container.element).toBeDefined();
+
+        const child0 = new Widget();
+        const child1 = new Widget();
+        const child2 = new Widget();
+        container.add(child0);
+        container.add(child1);
+        container.add(child2);
+
+        expect(container.count).toEqual(3);
+        expect(container.child(0)).toEqual(child0);
+        expect(container.child(1)).toEqual(child1);
+        expect(container.child(2)).toEqual(child2);
+        expect(container.children()).toEqual([child0, child1, child2]);
+        expect(container.indexOf(child0)).toEqual(0);
+        expect(container.indexOf(child1)).toEqual(1);
+        expect(container.indexOf(child2)).toEqual(2);
+
+        const removed0 = container.remove(0);
+        expect(removed0).toBeDefined();
+        const removed1 = container.remove(child1);
+        expect(removed1).toBeDefined();
+
+        container.clear();
+        expect(container.count).toEqual(0);
+        expect(container.child(0)).toEqual(null);
+        expect(container.children()).toEqual([]);
+        expect(container.indexOf(child0)).toEqual(-1);
+        expect(container.indexOf(child1)).toEqual(-1);
+        expect(container.indexOf(child2)).toEqual(-1);
+    });
+
+    it('Utils', (done) => {
+        // Another menu fake
+        Utils.startMenuSession({close: function () {}});
+        expect(Utils.isMenuSession()).toBeTruthy();
+        // Another menu fake
+        Utils.startMenuSession({close: function () {}});
+        expect(Utils.isMenuSession()).toBeTruthy();
+        Utils.closeMenuSession();
+        Utils.closeMenuSession();
+        expect(Utils.isMenuSession()).toBeFalsy();
+        const btn = document.createElement('button');
+        document.body.appendChild(btn);
+        const al = Utils.absoluteLeft(document.body);
+        const at = Utils.absoluteTop(document.body);
+        expect(al).toEqual(0);
+        expect(at).toEqual(0);
+        let clicks = 0;
+        const clickReg = Utils.on(btn, Utils.Events.CLICK, () => {
+            clicks++;
+        });
+        btn.click();
+        Invoke.later(() => {
+            expect(clicks).toEqual(1);
+            clickReg.removeHandler();
+            document.body.removeChild(btn);
+            const fileField = Utils.selectFile(() => {
+            }, '*.png');
+            expect(fileField).toBeDefined();
+            const colorField = Utils.selectColor(() => {
+            }, '#ccc');
+            expect(colorField).toBeDefined();
+            const fileField2 = Utils.selectFile(() => {
+            });
+            expect(fileField2).toBeDefined();
+            const colorField2 = Utils.selectColor(() => {
+            });
+            expect(colorField2).toBeDefined();
+            done();
+        });
+    });
 });

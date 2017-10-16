@@ -119,6 +119,7 @@ function selectFile(onSelection, fileFilter) {
             onSelection(fileField.files);
     });
     fileField.click();
+    return fileField;
 }
 
 function selectColor(onSelection, oldValue) {
@@ -130,44 +131,10 @@ function selectColor(onSelection, oldValue) {
         onSelection(new Color(colorField.value));
     });
     colorField.click();
-}
-
-function readWidgetElement(widgetRootElement, aModel) {
-    const uiReader = new DefaultUiReader(widgetRootElement, aModel);
-    uiReader.parse();
-    const target = {};
-    uiReader.widgets.forEach(widget => {
-        target[widget.name] = widget;
-    });
-    return target;
-}
-
-function loadWidgets(aModuleName, aModel) {
-    const layoutDoc = getFormDocument(aModuleName);
-    if (layoutDoc) {
-        const rootElement = layoutDoc.documentElement;
-        const widgetRootElement = aModuleName ? findLayoutElementByBundleName(rootElement, aModuleName) : rootElement;
-        return readWidgetElement(widgetRootElement, aModel);
-    } else {
-        throw `UI definition for module '${aModuleName}' is not found`;
-    }
-}
-
-function readWidgets(aContent, aModel) {
-    const layoutDoc = new DOMParser().parse(`${aContent}`);
-    const rootElement = layoutDoc.documentElement;
-    return readWidgetElement(rootElement, aModel);
+    return colorField;
 }
 
 const module = {};
-Object.defineProperty(module, 'loadWidgets', {
-    enumerable: true,
-    value: loadWidgets
-});
-Object.defineProperty(module, 'readWidgets', {
-    enumerable: true,
-    value: readWidgets
-});
 Object.defineProperty(module, 'Colors', {
     enumerable: true,
     value: Color
@@ -243,15 +210,6 @@ Object.defineProperty(module, 'absoluteLeft', {
 Object.defineProperty(module, 'absoluteTop', {
     get: function() {
         return absoluteTop;
-    }
-});
-
-function isMobile() {
-    return 'orientation' in window;
-}
-Object.defineProperty(module, 'isMobile', {
-    get: function() {
-        return isMobile;
     }
 });
 
