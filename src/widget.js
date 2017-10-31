@@ -118,7 +118,7 @@ class Widget {
             if (opaque)
                 box.style.backgroundColor = background && background.toStyled ? background.toStyled() : background;
             else
-                box.style.background = 'none';
+                box.style.backgroundColor = 'transparent';
         }
 
         Object.defineProperty(this, 'opaque', {
