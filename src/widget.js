@@ -231,7 +231,7 @@ class Widget {
                 }
             }
         });
-        Object.defineProperty(this, "left", {
+        Object.defineProperty(this, 'left', {
             get: function () {
                 if (isAttached()) {
                     return shell.offsetLeft;
@@ -251,7 +251,7 @@ class Widget {
                 }
             }
         });
-        Object.defineProperty(this, "top", {
+        Object.defineProperty(this, 'top', {
             get: function () {
                 if (isAttached()) {
                     return shell.offsetTop;
@@ -271,7 +271,7 @@ class Widget {
                 }
             }
         });
-        Object.defineProperty(this, "width", {
+        Object.defineProperty(this, 'width', {
             get: function () {
                 if (isAttached())
                     return shell.offsetWidth;
@@ -292,7 +292,7 @@ class Widget {
                 }
             }
         });
-        Object.defineProperty(this, "height", {
+        Object.defineProperty(this, 'height', {
             get: function () {
                 if (isAttached()) {
                     return shell.offsetHeight;
