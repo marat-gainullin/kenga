@@ -23,8 +23,8 @@ class Widget {
         let contextMenu;
         let enabled = true;
         let name;
-        let background;
-        let foreground;
+        let background = null;
+        let foreground = null;
         let opaque = true;
         let cursor;
         let toolTipText;
