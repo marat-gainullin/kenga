@@ -22,6 +22,7 @@ function getPathData(anElement, aPath) {
             target = target[propName];
             if (!target) {
                 propName = null;
+                break;
             } else
                 propName = path[i];
         }
