@@ -23,7 +23,7 @@ class BoxField extends Widget {
         /**
          * The text to be shown when component's value is absent.
          */
-        Object.defineProperty(this, "emptyText", {
+        Object.defineProperty(this, 'emptyText', {
             configurable: true,
             get: function() {
                 return box.placeholder;
