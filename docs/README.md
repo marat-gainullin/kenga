@@ -1,5 +1,6 @@
 # Kenga
-Solid web widgets. Kenga is ultra lightweight visual widgets library for browser.
+Solid web widgets.
+Kenga is ultra lightweight visual widgets library for browser.
 It uses only morden approaches to layout handling, input widgets building. It contains no layout resize code, uses HTML5 inputs, etc.
 It is written solely in ES6.
 
@@ -9,8 +10,16 @@ To install `kenga` package to your project, type the following command:
 
 ## Using
 To use kenga wigets, install and use one of the following packages:
-`kenga-containers`, `kenga-labels`, `kenga-buttons`, `kenga-model-buttons`, `kenga-fields`, `kenga-model-fields`, `kenga-menu`, `kenga-window`, `kenga-grid`
-or implement your ouwn awesome widget.
+- `kenga-containers`
+- `kenga-labels`
+- `kenga-buttons`
+- `kenga-model-buttons`
+- `kenga-fields`
+- `kenga-model-fields`
+- `kenga-menu`,
+- `kenga-window`
+- `kenga-grid`
+or implement your own awesome widget.
 
 After widget is ready, you can write somethis like this `const w = new MyAwesome(); document.body.appendChild(w.element);`.
 
