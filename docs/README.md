@@ -30,6 +30,6 @@ This package contains base classes for widgets:
 * `Widget` base calss for all widgets. Contains simple `parent` and `element` properties, events handling, etc.
 * `Container` contains base class for container widgets. It supports container contract, i.e. methods `add`, `remove`, `count`, `child(index)`, `children`.
 * `BoxField` intended for standalone using and as a core of decorated input widget as well.
-* `Bound` class, that implements two way data binding for any widget. Se how it is used in package `kenga-model-buttons` and `kenga-model-fields`.
+* `Bound` mixin, that implements two way data binding for any widget. Se how it is used in package `kenga-model-buttons` and `kenga-model-fields`.
 * `Decorator` mixin, that adds decorations to a widget, that allow a user to clear a widget's value and select a value with custom value selection dialog.
 
