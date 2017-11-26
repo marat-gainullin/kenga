@@ -1,16 +1,22 @@
 # Kenga
 Solid web widgets.
-Kenga is ultra lightweight visual widgets library for browser.
-It uses only morden approaches to layout handling, input widgets building. It contains no layout resize code, uses HTML5 inputs, etc.
+Kenga is ultra lightweight visual widgets library for a browser.
+It uses only morden approaches to layout handling, input widgets building.
+
+It contains no layout resize code, uses HTML5 inputs, etc.
 It is written solely in ES6.
+
 There is WYSIWYG editor of views, composed of kenga widgets - [Winnie](https://github.com/marat-gainullin/winnie).
+You can try it at http://kengajs.com/demo/winnie.html
 
 ## Install
 To install `kenga` package to your project, type the following command:
-`npm install kenga --save`
+```
+npm install kenga --save
+```
 
 ## Using
-To use kenga wigets, install and use one of the following packages:
+To use kenga widgets, install and use one of the following packages:
 - `kenga-containers`
 - `kenga-labels`
 - `kenga-buttons`
@@ -22,7 +28,10 @@ To use kenga wigets, install and use one of the following packages:
 - `kenga-grid`
 or implement your own awesome widget.
 
-After widget is ready, you can write somethis like this `const w = new MyAwesome(); document.body.appendChild(w.element);`.
+After widget is ready, you can write something like this:
+```
+const w = new MyAwesome(); document.body.appendChild(w.element);
+```
 
 ## Architecture
 Widget is a JavaScript class, that incapsulates a DOM element, and its layout rules. Layout rules are implmemented as pure CSS3 rules.
