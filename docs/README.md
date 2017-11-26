@@ -1,5 +1,4 @@
 # Kenga
-Solid web widgets.
 Kenga is ultra lightweight visual widgets library for a browser.
 It uses only morden approaches to layout handling, input widgets building.
 
