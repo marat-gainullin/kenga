@@ -39,8 +39,8 @@ Widget is a JavaScript class. It incapsulates a DOM element, and its layout rule
 
 This package contains base classes for widgets:
 * `Widget` base class for all widgets. It contains `parent` and `element` properties, simple events handling, etc.
-* `Container` contains base class for container widgets. It supports container contract, i.e. methods `add`, `remove`, `count`, `child(index)`, `children`.
-* `BoxField` base class for input widhets. It can be used as a core of decorated input widget.
+* `Container` base class for container widgets. It supports container contract, i.e. methods `add`, `remove`, `count`, `child(index)`, `children`.
+* `BoxField` base class for input widgets. It can be used as a core of decorated input widget.
 * `Bound` mixin, that implements two way data binding for any widget. Se how it is used in package `kenga-model-buttons` and `kenga-model-fields`.
 * `Decorator` mixin, that adds decorations to a widget, that allow a user to clear a widget's value and select a value with custom value selection dialog.
 
