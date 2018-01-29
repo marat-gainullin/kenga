@@ -26,7 +26,6 @@ module.exports = function (config) {
             'test/**/*.js': ['browserify']
         },
         browserify: {
-            debug: true,
             extensions: ['.js'],
             bundleDelay: 1000,
             transform: [
@@ -41,7 +40,8 @@ module.exports = function (config) {
                     }
                 ]
                 ,['browserify-babel-istanbul']
-            ]
+            ],
+            debug: true
         },
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits

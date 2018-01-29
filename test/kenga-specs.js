@@ -3,7 +3,6 @@
 import '../src/layout.css';
 import '../src/theme.css';
 
-import Id from 'septima-utils/id';
 import Invoke from 'septima-utils/invoke';
 import Managed from 'septima-model/managed';
 import Font from '../src/font';
@@ -104,49 +103,64 @@ function expectWidget(widget) {
     widget.focus();
 
     expect('onShow' in widget).toBeTruthy();
-    expectValue(widget, 'onShow', function () {});
+    expectValue(widget, 'onShow', function () {
+    });
     expectValue(widget, 'onShow', null);
     expect('onHide' in widget).toBeTruthy();
-    expectValue(widget, 'onHide', function () {});
+    expectValue(widget, 'onHide', function () {
+    });
     expectValue(widget, 'onHide', null);
     expect('onMouseRelease' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseRelease', function () {});
+    expectValue(widget, 'onMouseRelease', function () {
+    });
     expectValue(widget, 'onMouseRelease', null);
     expect('onFocusLost' in widget).toBeTruthy();
-    expectValue(widget, 'onFocusLost', function () {});
+    expectValue(widget, 'onFocusLost', function () {
+    });
     expectValue(widget, 'onFocusLost', null);
     expect('onMousePress' in widget).toBeTruthy();
-    expectValue(widget, 'onMousePress', function () {});
+    expectValue(widget, 'onMousePress', function () {
+    });
     expectValue(widget, 'onMousePress', null);
     expect('onMouseEnter' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseEnter', function () {});
+    expectValue(widget, 'onMouseEnter', function () {
+    });
     expectValue(widget, 'onMouseEnter', null);
     expect('onMouseMove' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseMove', function () {});
+    expectValue(widget, 'onMouseMove', function () {
+    });
     expectValue(widget, 'onMouseMove', null);
     expect('onAction' in widget).toBeTruthy();
-    expectValue(widget, 'onAction', function () {});
+    expectValue(widget, 'onAction', function () {
+    });
     expectValue(widget, 'onAction', null);
     expect('onKeyRelease' in widget).toBeTruthy();
-    expectValue(widget, 'onKeyRelease', function () {});
+    expectValue(widget, 'onKeyRelease', function () {
+    });
     expectValue(widget, 'onKeyRelease', null);
     expect('onKeyType' in widget).toBeTruthy();
-    expectValue(widget, 'onKeyType', function () {});
+    expectValue(widget, 'onKeyType', function () {
+    });
     expectValue(widget, 'onKeyType', null);
     expect('onMouseWheelMove' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseWheelMove', function () {});
+    expectValue(widget, 'onMouseWheelMove', function () {
+    });
     expectValue(widget, 'onMouseWheelMove', null);
     expect('onFocus' in widget).toBeTruthy();
-    expectValue(widget, 'onFocus', function () {});
+    expectValue(widget, 'onFocus', function () {
+    });
     expectValue(widget, 'onFocus', null);
     expect('onMouseClick' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseClick', function () {});
+    expectValue(widget, 'onMouseClick', function () {
+    });
     expectValue(widget, 'onMouseClick', null);
     expect('onMouseExit' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseExit', function () {});
+    expectValue(widget, 'onMouseExit', function () {
+    });
     expectValue(widget, 'onMouseExit', null);
     expect('onKeyPress' in widget).toBeTruthy();
-    expectValue(widget, 'onKeyPress', function () {});
+    expectValue(widget, 'onKeyPress', function () {
+    });
     expectValue(widget, 'onKeyPress', null);
 }
 
@@ -298,19 +312,19 @@ describe('Kenga Api', () => {
         expect(f + '').toEqual('Tahoma Bold Italic 5');
     });
     it('Bound Api. Scalar', () => {
-        const data = {
-            path: {
+        const data = new Proxy({
+            path: new Proxy({
                 name: 'Merilin'
-            }
-        };
-        Managed.listenable(data);
-        Managed.listenable(data.path);
+            }, Managed.manageObject())
+        }, Managed.manageObject());
+
         let changes = 0;
-        const listenReg = Bound.observePath(data, 'path.name', (evt) => {
-            changes++;
+        const listenReg = Bound.observePath(data, 'path.name', {
+            change: (evt) => {
+                changes++;
+            }
         });
         data.path.name += '_';
-        Managed.fire(data.path, {propertyName: 'name', oldValue: 'Merilin', newValue: 'Merilin_'});
         expect(changes).toEqual(1);
         listenReg.unlisten();
         data.path.name += '_';
@@ -320,24 +334,21 @@ describe('Kenga Api', () => {
         expect(Bound.getPathData(data, 'path.name')).toEqual('Jane');
     });
     it('Bound Api. Elements', () => {
-        const data = {
-            items: [
-                {name: 'item1'},
-                {name: 'item2'},
-                {name: 'item3'}
-            ]
-        };
-        Managed.listenable(data);
-        Managed.listenable(data.items);
-        data.items.forEach((item) => {
-            Managed.listenable(item);
-        });
+        const data = new Proxy({
+            items: new Proxy([
+                new Proxy({name: 'item1'}, Managed.manageObject()),
+                new Proxy({name: 'item2'}, Managed.manageObject()),
+                new Proxy({name: 'item3'}, Managed.manageObject())
+            ], Managed.manageArray())
+        }, Managed.manageObject());
+
         let changes = 0;
-        const listenReg = Bound.observeElements(data.items, (evt) => {
-            changes++;
+        const listenReg = Bound.observeElements(data.items, {
+            change: (evt) => {
+                changes++;
+            }
         });
         data.items[1].name += '_';
-        Managed.fire(data.items[1], {propertyName: 'name', oldValue: 'item2', newValue: 'item2_'});
         expect(changes).toEqual(1);
         listenReg.unlisten();
         data.items[1].name += '_';
@@ -415,17 +426,17 @@ describe('Kenga Api', () => {
         });
         document.body.appendChild(field.element);
         Promise.resolve()
-                .then(() => {
-                    field.focus();
-                })
-                .then(() => {
-                    field.blur();
-                })
-                .then(() => {
-                    focusReg.removeHandler();
-                    focusLostReg.removeHandler();
-                    done();
-                });
+            .then(() => {
+                field.focus();
+            })
+            .then(() => {
+                field.blur();
+            })
+            .then(() => {
+                focusReg.removeHandler();
+                focusLostReg.removeHandler();
+                done();
+            });
     });
 
     class Field extends BoxField {
@@ -493,13 +504,11 @@ describe('Kenga Api', () => {
     }
 
     it('ModelField', (done) => {
-        const data = {
-            path: {
+        const data = new Proxy({
+            path: new Proxy({
                 name: 'Merilin'
-            }
-        };
-        Managed.listenable(data);
-        Managed.listenable(data.path);
+            }, Managed.manageObject())
+        }, Managed.manageObject());
 
         const widget = new ModelField();
         widget.nullable = true;
@@ -512,7 +521,6 @@ describe('Kenga Api', () => {
         expect(widget.value).toEqual('Merilin');
 
         data.path.name += '_';
-        Managed.fire(data.path, {propertyName: 'name', oldValue: 'Merilin', newValue: 'Merilin_'});
         expect(data.path.name).toEqual('Merilin_');
         expect(widget.value).toEqual('Merilin_');
 
@@ -593,10 +601,16 @@ describe('Kenga Api', () => {
 
     it('Utils', (done) => {
         // Another menu fake
-        Utils.startMenuSession({close: function () {}});
+        Utils.startMenuSession({
+            close: function () {
+            }
+        });
         expect(Utils.isMenuSession()).toBeTruthy();
         // Another menu fake
-        Utils.startMenuSession({close: function () {}});
+        Utils.startMenuSession({
+            close: function () {
+            }
+        });
         expect(Utils.isMenuSession()).toBeTruthy();
         Utils.closeMenuSession();
         Utils.closeMenuSession();

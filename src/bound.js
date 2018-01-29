@@ -61,6 +61,7 @@ function observeElements(target, propListener) {
         }
         return null;
     }
+
     const subscribed = [];
     target.forEach(item => {
         const remover = subscribe(item, propListener);
@@ -79,9 +80,11 @@ function observeElements(target, propListener) {
 
 function observePath(target, path, propListener) {
     function subscribe(aData, aListener, aPropName) {
-        const listenReg = listen(aData, aChange => {
-            if (!aPropName || aChange.propertyName === aPropName) {
-                aListener(aChange);
+        const listenReg = listen(aData, {
+            change: aChange => {
+                if (!aPropName || aChange.propertyName === aPropName) {
+                    aListener.change(aChange);
+                }
             }
         });
         if (listenReg) {
@@ -90,20 +93,23 @@ function observePath(target, path, propListener) {
             return null;
         }
     }
+
     let subscribed = [];
 
-    const pathRebinder = evt => {
-        subscribed.forEach(aEntry => {
-            aEntry();
-        });
-        listenPath();
-        const pathDatum = getPathData(target, path);
-        propListener({
-            source: target,
-            propertyName: path,
-            oldValue: pathDatum,
-            newValue: pathDatum
-        });
+    const pathRebinder = {
+        change: evt => {
+            subscribed.forEach(aEntry => {
+                aEntry();
+            });
+            listenPath();
+            const pathDatum = getPathData(target, path);
+            propListener.change({
+                source: target,
+                propertyName: path,
+                oldValue: pathDatum,
+                newValue: pathDatum
+            });
+        }
     };
 
     function listenPath() {
@@ -125,6 +131,7 @@ function observePath(target, path, propListener) {
             }
         }
     }
+
     if (target) {
         listenPath();
     }
@@ -157,6 +164,7 @@ function Bound() {
     }
 
     var settingToData = false;
+
     function toData(datum) {
         if (!settingToWidget) {
             settingToData = true;
@@ -183,8 +191,10 @@ function Bound() {
 
     function bind() {
         if (data && path) {
-            boundReg = observePath(data, path, evt => {
-                toWidget(evt.newValue);
+            boundReg = observePath(data, path, {
+                change: evt => {
+                    toWidget(evt.newValue);
+                }
             });
             toWidget(getPathData(data, path));
         } else {
@@ -256,6 +266,7 @@ class PathComparator {
             const res = oCompare(oData1, oData2);
             return ascending ? res : -res;
         }
+
         Object.defineProperty(this, 'compare', {
             get: function () {
                 return compare;
