@@ -887,7 +887,7 @@ class Widget {
                     if (onKeyPress && self.addKeyPressHandler) {
                         keyPressReg = self.addKeyPressHandler(event => {
                             if (onKeyPress) {
-                                event.getEvent().stopPropagation();
+                                event.event.stopPropagation();
                                 onKeyPress(event);
                             }
                         });
