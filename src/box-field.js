@@ -4,7 +4,7 @@ import Widget from './widget';
 import ValueChangeEvent from './events/value-change-event';
 import FocusEvent from './events/focus-event';
 import BlurEvent from './events/blur-event';
-import MouseEvent from "./events/mouse-event";
+import KeyEvent from "./events/key-event";
 const ERROR_BUBBLE_OFFSET_PART = 0.2;
 
 class BoxField extends Widget {
