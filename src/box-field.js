@@ -4,6 +4,7 @@ import Widget from './widget';
 import ValueChangeEvent from './events/value-change-event';
 import FocusEvent from './events/focus-event';
 import BlurEvent from './events/blur-event';
+import MouseEvent from "./events/mouse-event";
 const ERROR_BUBBLE_OFFSET_PART = 0.2;
 
 class BoxField extends Widget {
@@ -153,6 +154,42 @@ class BoxField extends Widget {
                 });
             });
         }
+
+        function addKeyTypeHandler(handler) {
+            return Ui.on(box, Ui.Events.KEYPRESS, evt => {
+                handler(new KeyEvent(self, evt));
+            });
+        }
+        Object.defineProperty(this, 'addKeyTypeHandler', {
+            configurable: true,
+            get: function () {
+                return addKeyTypeHandler;
+            }
+        });
+
+        function addKeyPressHandler(handler) {
+            return Ui.on(box, Ui.Events.KEYDOWN, evt => {
+                handler(new KeyEvent(self, evt));
+            });
+        }
+        Object.defineProperty(this, 'addKeyPressHandler', {
+            configurable: true,
+            get: function () {
+                return addKeyPressHandler;
+            }
+        });
+
+        function addKeyReleaseHandler(handler) {
+            return Ui.on(box, Ui.Events.KEYUP, evt => {
+                handler(new KeyEvent(self, evt));
+            });
+        }
+        Object.defineProperty(this, 'addKeyReleaseHandler', {
+            configurable: true,
+            get: function () {
+                return addKeyReleaseHandler;
+            }
+        });
     }
 }
 
