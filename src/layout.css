@@ -53,7 +53,6 @@
 
 .p-clear {
     width: 20px;
-    background-color: yellowgreen;
 }
 
 .p-decorator-nullable-selectable > .p-clear {
@@ -66,5 +65,4 @@
 .p-select {
     width: 30px;
     right: 0px;
-    background-color: aquamarine;
 }

@@ -1,7 +1,6 @@
 import Color from './color';
 import Cursor from './cursor';
 import Font from './font';
-import Invoke from 'septima-utils/invoke';
 
 const global = window;
 const Events = {
