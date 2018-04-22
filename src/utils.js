@@ -51,7 +51,7 @@ function absoluteLeft(elem) {
     let curr = elem;
     // This intentionally excludes body which has a null offsetParent.
     while (curr.offsetParent) {
-        left -= curr.scrollLeft;
+        left -= curr.offsetParent.scrollLeft;
         curr = curr.parentNode;
     }
     while (elem) {
@@ -66,7 +66,7 @@ function absoluteTop(elem) {
     let curr = elem;
     // This intentionally excludes body which has a null offsetParent.
     while (curr.offsetParent) {
-        top -= curr.scrollTop;
+        top -= curr.offsetParent.scrollTop;
         curr = curr.parentNode;
     }
     while (elem) {
