@@ -52,7 +52,12 @@ class Widget {
                 return shell;
             }
         });
-        Object.defineProperty(this, 'input', {
+        Object.defineProperty(this, 'shell', {
+            get: function () {
+                return shell;
+            }
+        });
+        Object.defineProperty(this, 'box', {
             get: function () {
                 return box;
             }
