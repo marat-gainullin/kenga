@@ -52,6 +52,11 @@ class Widget {
                 return shell;
             }
         });
+        Object.defineProperty(this, 'input', {
+            get: function () {
+                return box;
+            }
+        });
 
         Object.defineProperty(this, 'enabled', {
             get: function () {
