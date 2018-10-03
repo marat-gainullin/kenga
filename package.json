@@ -1,6 +1,6 @@
 {
   "name": "kenga",
-  "version": "0.0.39",
+  "version": "0.0.40",
   "description": "Solid web widgets",
   "main": "index.js",
   "repository": "https://github.com/marat-gainullin/kenga.git",
