@@ -6,7 +6,7 @@ import ActionEvent from './events/action-event';
 
 class Widget {
     constructor(box, shell) {
-        
+
         box = box || document.createElement('div');
         shell = shell || box;
 
@@ -219,6 +219,7 @@ class Widget {
                 box.removeAttribute('tabindex');
             }
         }
+
         Object.defineProperty(this, 'tabIndex', {
             get: function () {
                 return tabIndex;
@@ -394,18 +395,15 @@ class Widget {
         }
 
         function addMouseClickHandler(handler) {
-            const clickReg = Ui.on(shell, Ui.Events.CLICK, evt => {
+            return Ui.on(shell, Ui.Events.CLICK, evt => {
                 handler(new MouseEvent(self, evt, 1));
             });
-            const dblClickReg = Ui.on(shell, Ui.Events.DBLCLICK, evt => {
+        }
+
+        function addMouseDoubleClickHandler(handler) {
+            return Ui.on(shell, Ui.Events.DBLCLICK, evt => {
                 handler(new MouseEvent(self, evt, 2));
             });
-            return {
-                removeHandler: function () {
-                    clickReg.removeHandler();
-                    dblClickReg.removeHandler();
-                }
-            };
         }
 
         function addMousePressHandler(h) {
@@ -463,6 +461,11 @@ class Widget {
         Object.defineProperty(this, 'addMouseClickHandler', {
             get: function () {
                 return addMouseClickHandler;
+            }
+        });
+        Object.defineProperty(this, 'addMouseDoubleClickHandler', {
+            get: function () {
+                return addMouseDoubleClickHandler;
             }
         });
         Object.defineProperty(this, 'addMousePressHandler', {
@@ -539,6 +542,7 @@ class Widget {
         function focus() {
             box.focus();
         }
+
         Object.defineProperty(this, 'focus', {
             get: function () {
                 return focus;
@@ -548,6 +552,7 @@ class Widget {
         function blur() {
             box.blur();
         }
+
         Object.defineProperty(this, 'blur', {
             get: function () {
                 return blur;
@@ -638,6 +643,30 @@ class Widget {
                             if (onMouseClick) {
                                 evt.event.stopPropagation();
                                 onMouseClick(evt);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        let onMouseDoubleClick;
+        let mouseDoubleClickReg;
+        Object.defineProperty(this, 'onMouseDoubleClick', {
+            get: function () {
+                return onMouseDoubleClick;
+            },
+            set: function (aValue) {
+                if (onMouseDoubleClick !== aValue) {
+                    if (mouseDoubleClickReg) {
+                        mouseDoubleClickReg.removeHandler();
+                        mouseDoubleClickReg = null;
+                    }
+                    onMouseDoubleClick = aValue;
+                    if (onMouseDoubleClick) {
+                        mouseDoubleClickReg = addMouseDoubleClickHandler(evt => {
+                            if (onMouseDoubleClick) {
+                                evt.event.stopPropagation();
+                                onMouseDoubleClick(evt);
                             }
                         });
                     }
