@@ -1,11 +1,11 @@
 # Kenga
-Kenga is ultra lightweight visual widgets library for a browser.
+Kenga is an ultra lightweight visual widgets library for a browser.
 It uses only morden approaches to layout handling, input widgets building.
 
 It contains no layout resize code, uses HTML5 inputs, etc.
 It is written solely in ES6.
 
-There is WYSIWYG editor of views, composed of kenga widgets - [Winnie](https://github.com/marat-gainullin/winnie).
+There is a WYSIWYG editor of kenga views, composed of kenga widgets itself - [Winnie](https://github.com/marat-gainullin/winnie).
 
 You can try [KengaJS Designer Demo](http://kengajs.com/demo/winnie.html)
 
