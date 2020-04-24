@@ -7,7 +7,7 @@ It is written solely in ES6.
 
 There is a WYSIWYG editor of kenga views, composed of kenga widgets itself - [Winnie](https://github.com/marat-gainullin/winnie).
 
-You can try [KengaJS Designer Demo](http://kengajs.com/demo/winnie.html)
+You can try [KengaJS Designer Demo](http://marat-gainullin.github.io/kenga/demo/winnie.html)
 
 ## Install
 To install `kenga` package to your project, type the following command:
