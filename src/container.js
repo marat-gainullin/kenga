@@ -1,7 +1,6 @@
+import Invoke from 'septima-utils/invoke';
 import Widget from './widget';
 import ContainerEvent from './events/container-event';
-import Invoke from 'septima-utils/invoke';
-import Logger from 'septima-utils/logger';
 
 class Container extends Widget {
     constructor(shell, content) {
