@@ -1,4 +1,3 @@
-import Invoke from 'septima-utils/invoke';
 import Ui from './utils';
 import MouseEvent from './events/mouse-event';
 import WidgetEvent from './events/widget-event';
@@ -177,25 +176,11 @@ class Widget {
         let errorText = null;
         Object.defineProperty(this, 'error', {
             get: function () {
-                if (errorText)
-                    return errorText;
-                else if (box.validationMessage)
-                    return box.validationMessage;
-                else
-                    return null;
+                return errorText;
             },
             set: function (aValue) {
-                if (self.error !== aValue) {
+                if (errorText !== aValue) {
                     errorText = aValue;
-                    if (box.setCustomValidity)
-                        box.setCustomValidity(aValue !== null ? aValue : '');
-                    if (aValue) {
-                        if (self.showError)
-                            self.showError();
-                    } else {
-                        if (self.hideError)
-                            self.hideError();
-                    }
                 }
             }
         });
@@ -366,7 +351,7 @@ class Widget {
         function fireAction() {
             const event = new ActionEvent(self);
             actionHandlers.forEach(h => {
-                Invoke.later(() => {
+                Ui.later(() => {
                     h(event);
                 });
             });
@@ -562,7 +547,7 @@ class Widget {
         function fireShown() {
             const event = new WidgetEvent(self);
             showHandlers.forEach(h => {
-                Invoke.later(() => {
+                Ui.later(() => {
                     h(event);
                 });
             });
@@ -571,7 +556,7 @@ class Widget {
         function fireHidden() {
             const event = new WidgetEvent(self);
             hideHandlers.forEach(h => {
-                Invoke.later(() => {
+                Ui.later(() => {
                     h(event);
                 });
             });

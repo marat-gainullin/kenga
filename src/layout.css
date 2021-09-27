@@ -12,6 +12,10 @@
     line-height: 0px;
 }
 
+.p-container>input,.p-container>a,.p-container>p,.p-container>img {
+    line-height: normal;
+}
+
 .p-decorator > input,
 .p-decorator > select,
 .p-decorator > progress,
@@ -65,4 +69,8 @@
 .p-select {
     width: 30px;
     right: 0px;
+}
+
+.p-error-popup {
+    position: absolute;
 }

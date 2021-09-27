@@ -1,4 +1,4 @@
-import Invoke from 'septima-utils/invoke';
+import Ui from './utils';
 import Widget from './widget';
 import ContainerEvent from './events/container-event';
 
@@ -150,7 +150,7 @@ class Container extends Widget {
         function fireAdded(w) {
             const event = new ContainerEvent(self, w);
             addHandlers.forEach(h => {
-                Invoke.later(() => {
+                Ui.later(() => {
                     h(event);
                 });
             });
@@ -201,7 +201,7 @@ class Container extends Widget {
         function fireRemoved(w) {
             const event = new ContainerEvent(self, w);
             removeHandlers.forEach(h => {
-                Invoke.later(() => {
+                Ui.later(() => {
                     h(event);
                 });
             });

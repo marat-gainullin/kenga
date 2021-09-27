@@ -133,7 +133,59 @@ function selectColor(onSelection, oldValue) {
     return colorField;
 }
 
+function later(action) {
+    const timeout = setTimeout(function() {
+        clearTimeout(timeout);
+        action();
+    }, 0);
+}
+
+function delayed(timeout, action) {
+    if (arguments.length < 2)
+        throw 'Ui.delayed needs 2 arguments (timeout, action).';
+    const timeoutCookie = setTimeout(function() {
+        clearTimeout(timeoutCookie);
+        action();
+    }, +timeout);
+}
+
+const throttle = ((() => {
+    let watchdog = null;
+
+    function _throttle(timeout, action) {
+        if (arguments.length < 2)
+            throw "Missing Ui.throttle 'action' argument";
+        if (arguments.length < 1)
+            throw "Missing Ui.throttle 'timeout' argument";
+        function invoked() {
+            watchdog = null;
+            action();
+        }
+        if (timeout < 1) // ms
+            action();
+        else {
+            if (!watchdog) {
+                delayed(timeout, invoked);
+                watchdog = invoked;
+            }
+        }
+    }
+    return _throttle;
+})());
+
 const module = {};
+Object.defineProperty(module, 'later', {
+    enumerable: true,
+    value: later
+});
+Object.defineProperty(module, 'delayed', {
+    enumerable: true,
+    value: delayed
+});
+Object.defineProperty(module, 'throttle', {
+    enumerable: true,
+    value: throttle
+});
 Object.defineProperty(module, 'Colors', {
     enumerable: true,
     value: Color

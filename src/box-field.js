@@ -1,11 +1,10 @@
 import Ui from './utils';
-import Invoke from 'septima-utils/invoke';
 import Widget from './widget';
 import ValueChangeEvent from './events/value-change-event';
+import TextChangeEvent from './events/text-change-event';
 import FocusEvent from './events/focus-event';
 import BlurEvent from './events/blur-event';
 import KeyEvent from "./events/key-event";
-const ERROR_BUBBLE_OFFSET_PART = 0.2;
 
 class BoxField extends Widget {
     constructor(box, shell) {
@@ -26,64 +25,180 @@ class BoxField extends Widget {
          */
         Object.defineProperty(this, 'emptyText', {
             configurable: true,
-            get: function() {
+            get: function () {
                 return box.placeholder;
             },
-            set: function(aValue) {
+            set: function (aValue) {
                 box.placeholder = aValue;
             }
         });
 
+        function checkValidity() {
+            return box.checkValidity();
+        }
+
+        this.checkValidity = checkValidity;
+
+        function formatError() {
+            return box.validationMessage;
+        }
+
+        this.formatError = formatError;
+
+        function validate() {
+            if (self.checkValidity) {
+                if (self.checkValidity()) {
+                    if (self.hideError) {
+                        self.hideError();
+                    }
+                } else {
+                    const message = self.error ? self.error : (self.formatError ? self.formatError() : null)
+                    if (message && self.showError) {
+                        self.showError(message);
+                    }
+                }
+            }
+        }
+
+        this.validate = validate;
+
+        this.validateOnInput = true;
+
         const changeReg = Ui.on(box, Ui.Events.CHANGE, evt => {
-            self.fireAction();
-            box.checkValidity();
-            if (self.error)
-                showError();
-            else
+            if (self.validate) {
+                self.validate();
+            }
+            if (self.textChanged) {
                 self.textChanged();
+            }
+        });
+
+        const enterReg = Ui.on(box, Ui.Events.KEYPRESS, evt => {
+            if (evt.key.toLowerCase() === 'enter') {
+                self.fireAction();
+            }
         });
 
         const inputReg = Ui.on(box, Ui.Events.INPUT, evt => {
-            self.error = null;
+            if (self.validateOnInput) {
+                if (self.validate) {
+                    self.validate();
+                }
+            }
+            fireTextChanged(box.value)
         });
 
         function hideError() {
             if (errorPopup && errorPopup.parentNode)
-                document.body.removeChild(errorPopup);
+                errorPopup.parentNode.removeChild(errorPopup);
             errorPopup = null;
         }
+
         this.hideError = hideError;
 
-        var errorPopup = null;
+        let errorPopup = null;
 
-        function showError() {
-            hideError();
-            errorPopup = document.createElement('div');
-            errorPopup.className = 'p-error-popup';
-            errorPopup.innerText = self.error;
-            const left = Ui.absoluteLeft(box);
-            const top = Ui.absoluteTop(box);
-            errorPopup.style.left = `${left + box.offsetWidth / 2}px`;
-            errorPopup.style.top = `${top + box.offsetHeight}px`;
-            document.body.appendChild(errorPopup);
-            errorPopup.style.left = `${errorPopup.offsetLeft - errorPopup.offsetWidth * ERROR_BUBBLE_OFFSET_PART}px`;
+        function showError(errorText) {
+            if (errorPopup == null) {
+                errorPopup = document.createElement('div');
+                errorPopup.className = 'p-error-popup';
+                errorPopup.innerText = errorText;
+                if (shell === box) {
+                    const left = Ui.absoluteLeft(box);
+                    const top = Ui.absoluteTop(box);
+                    errorPopup.style.left = `${left}px`;
+                    errorPopup.style.top = `${top}px`;
+                    document.body.appendChild(errorPopup);
+                    errorPopup.style.top = `${top + box.offsetHeight}px`;
+                } else {
+                    shell.appendChild(errorPopup);
+                }
+                Ui.later(() => {
+                    errorPopup.className += ' p-error-popup-shown';
+                });
+            } else {
+                errorPopup.innerText = errorText;
+            }
+            return errorPopup;
         }
 
         this.showError = showError;
+
+        Object.defineProperty(this, 'valid', {
+            get: function () {
+                return self.checkValidity ? self.checkValidity() : box.checkValidity;
+            }
+        });
+
+        const textChangeHandlers = new Set();
+
+        function addTextChangeHandler(handler) {
+            textChangeHandlers.add(handler);
+            return {
+                removeHandler: function () {
+                    textChangeHandlers.delete(handler);
+                }
+            };
+        }
+
+        Object.defineProperty(this, 'addTextChangeHandler', {
+            get: function () {
+                return addTextChangeHandler;
+            }
+        });
+
+        function fireTextChanged(aValue) {
+            const event = new TextChangeEvent(self, aValue);
+            textChangeHandlers.forEach(h => {
+                Ui.later(() => {
+                    h(event);
+                });
+            });
+        }
+
+        Object.defineProperty(this, 'fireTextChanged', {
+            get: function () {
+                return fireTextChanged;
+            }
+        });
+        let onTextChange;
+        let onTextChangeReg;
+        Object.defineProperty(this, 'onTextChange', {
+            get: function () {
+                return onTextChange;
+            },
+            set: function (aValue) {
+                if (onTextChange !== aValue) {
+                    if (onTextChangeReg) {
+                        onTextChangeReg.removeHandler();
+                        onTextChangeReg = null;
+                    }
+                    onTextChange = aValue;
+                    if (onTextChange && addTextChangeHandler) {
+                        onTextChangeReg = addTextChangeHandler(event => {
+                            if (onTextChange) {
+                                onTextChange(event);
+                            }
+                        });
+
+                    }
+                }
+            }
+        });
 
         const valueChangeHandlers = new Set();
 
         function addValueChangeHandler(handler) {
             valueChangeHandlers.add(handler);
             return {
-                removeHandler: function() {
+                removeHandler: function () {
                     valueChangeHandlers.delete(handler);
                 }
             };
         }
 
         Object.defineProperty(this, 'addValueChangeHandler', {
-            get: function() {
+            get: function () {
                 return addValueChangeHandler;
             }
         });
@@ -91,13 +206,14 @@ class BoxField extends Widget {
         function fireValueChanged(oldValue) {
             const event = new ValueChangeEvent(self, oldValue, self.value);
             valueChangeHandlers.forEach(h => {
-                Invoke.later(() => {
+                Ui.later(() => {
                     h(event);
                 });
             });
         }
+
         Object.defineProperty(this, 'fireValueChanged', {
-            get: function() {
+            get: function () {
                 return fireValueChanged;
             }
         });
@@ -106,13 +222,14 @@ class BoxField extends Widget {
         function addFocusHandler(handler) {
             focusHandlers.add(handler);
             return {
-                removeHandler: function() {
+                removeHandler: function () {
                     focusHandlers.delete(handler);
                 }
             };
         }
+
         Object.defineProperty(this, 'addFocusHandler', {
-            get: function() {
+            get: function () {
                 return addFocusHandler;
             }
         });
@@ -122,7 +239,7 @@ class BoxField extends Widget {
         function fireFocus() {
             const event = new FocusEvent(self);
             focusHandlers.forEach(h => {
-                Invoke.later(() => {
+                Ui.later(() => {
                     h(event);
                 });
             });
@@ -133,13 +250,14 @@ class BoxField extends Widget {
         function addFocusLostHandler(handler) {
             focusLostHandlers.add(handler);
             return {
-                removeHandler: function() {
+                removeHandler: function () {
                     focusLostHandlers.delete(handler);
                 }
             };
         }
+
         Object.defineProperty(this, 'addFocusLostHandler', {
-            get: function() {
+            get: function () {
                 return addFocusLostHandler;
             }
         });
@@ -149,7 +267,7 @@ class BoxField extends Widget {
         function fireBlur() {
             const event = new BlurEvent(self);
             focusLostHandlers.forEach(h => {
-                Invoke.later(() => {
+                Ui.later(() => {
                     h(event);
                 });
             });
@@ -160,6 +278,7 @@ class BoxField extends Widget {
                 handler(new KeyEvent(self, evt));
             });
         }
+
         Object.defineProperty(this, 'addKeyTypeHandler', {
             configurable: true,
             get: function () {
@@ -172,6 +291,7 @@ class BoxField extends Widget {
                 handler(new KeyEvent(self, evt));
             });
         }
+
         Object.defineProperty(this, 'addKeyPressHandler', {
             configurable: true,
             get: function () {
@@ -184,6 +304,7 @@ class BoxField extends Widget {
                 handler(new KeyEvent(self, evt));
             });
         }
+
         Object.defineProperty(this, 'addKeyReleaseHandler', {
             configurable: true,
             get: function () {
