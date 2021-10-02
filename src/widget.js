@@ -18,7 +18,7 @@ class Widget {
         shell.classList.add('p-widget');
 
         let parent;
-        let visibleDisplay = 'inline-block';
+        let visibleDisplay = '';
         let contextMenu;
         let enabled = true;
         let name;
