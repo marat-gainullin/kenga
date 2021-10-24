@@ -79,7 +79,7 @@ function absoluteTop(elem) {
 function on(element, eventName, handler, capturePhase) {
     element.addEventListener(eventName, handler, !!capturePhase);
     return {
-        removeHandler: function() {
+        removeHandler: function () {
             element.removeEventListener(eventName, handler, !!capturePhase);
         }
     };
@@ -134,7 +134,7 @@ function selectColor(onSelection, oldValue) {
 }
 
 function later(action) {
-    const timeout = setTimeout(function() {
+    const timeout = setTimeout(function () {
         clearTimeout(timeout);
         action();
     }, 0);
@@ -143,7 +143,7 @@ function later(action) {
 function delayed(timeout, action) {
     if (arguments.length < 2)
         throw 'Ui.delayed needs 2 arguments (timeout, action).';
-    const timeoutCookie = setTimeout(function() {
+    const timeoutCookie = setTimeout(function () {
         clearTimeout(timeoutCookie);
         action();
     }, +timeout);
@@ -157,10 +157,12 @@ const throttle = ((() => {
             throw "Missing Ui.throttle 'action' argument";
         if (arguments.length < 1)
             throw "Missing Ui.throttle 'timeout' argument";
+
         function invoked() {
             watchdog = null;
             action();
         }
+
         if (timeout < 1) // ms
             action();
         else {
@@ -170,6 +172,7 @@ const throttle = ((() => {
             }
         }
     }
+
     return _throttle;
 })());
 
@@ -305,22 +308,22 @@ Object.defineProperty(module, 'FontStyle', {
 });
 
 Object.defineProperty(module, 'on', {
-    get: function() {
+    get: function () {
         return on;
     }
 });
 Object.defineProperty(module, 'Events', {
-    get: function() {
+    get: function () {
         return Events;
     }
 });
 Object.defineProperty(module, 'absoluteLeft', {
-    get: function() {
+    get: function () {
         return absoluteLeft;
     }
 });
 Object.defineProperty(module, 'absoluteTop', {
-    get: function() {
+    get: function () {
         return absoluteTop;
     }
 });
@@ -332,19 +335,16 @@ Object.defineProperty(module, 'absoluteTop', {
     function startMenuSession(menu) {
         function isOutsideOfAnyMenu(anElement) {
             let currentElement = anElement;
-            while (currentElement !== null && !currentElement.className.includes('p-menu') && currentElement !== document.body)
+            while (currentElement !== null && !currentElement.classList.contains('p-menu') && currentElement !== document.body)
                 currentElement = currentElement.parentElement;
             return currentElement === document.body || currentElement === null;
         }
 
         if (menuSession !== menu) {
-            if (menuSession) {
-                menuSession.close();
-            }
+            closeMenuSession();
             menuSession = menu;
             mouseDownReg = on(document, Events.MOUSEDOWN, evt => {
                 if (isOutsideOfAnyMenu(evt.target)) {
-                    evt.stopPropagation();
                     closeMenuSession();
                 }
             }, true);
@@ -353,9 +353,12 @@ Object.defineProperty(module, 'absoluteTop', {
 
     function closeMenuSession() {
         if (menuSession) {
-            mouseDownReg.removeHandler();
             menuSession.close();
             menuSession = null;
+        }
+        if (mouseDownReg) {
+            mouseDownReg.removeHandler();
+            mouseDownReg = null;
         }
     }
 
@@ -364,17 +367,17 @@ Object.defineProperty(module, 'absoluteTop', {
     }
 
     Object.defineProperty(module, 'startMenuSession', {
-        get: function() {
+        get: function () {
             return startMenuSession;
         }
     });
     Object.defineProperty(module, 'closeMenuSession', {
-        get: function() {
+        get: function () {
             return closeMenuSession;
         }
     });
     Object.defineProperty(module, 'isMenuSession', {
-        get: function() {
+        get: function () {
             return isMenuSession;
         }
     });
