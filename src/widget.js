@@ -24,7 +24,6 @@ class Widget {
         let name;
         let background = null;
         let foreground = null;
-        let opaque = true;
         let cursor;
         let toolTipText;
         let focusable = false;
@@ -123,24 +122,6 @@ class Widget {
             }
         });
 
-        function applyBackground() {
-            if (opaque)
-                box.style.backgroundColor = background && background.toStyled ? background.toStyled() : background;
-            else
-                box.style.backgroundColor = 'transparent';
-        }
-
-        Object.defineProperty(this, 'opaque', {
-            get: function () {
-                return opaque;
-            },
-            set: function (aValue) {
-                if (opaque !== aValue) {
-                    opaque = aValue;
-                    applyBackground();
-                }
-            }
-        });
         Object.defineProperty(this, 'background', {
             get: function () {
                 return background;
@@ -148,7 +129,7 @@ class Widget {
             set: function (aValue) {
                 if (background !== aValue) {
                     background = aValue;
-                    applyBackground();
+                    box.style.backgroundColor = background && background.toStyled ? background.toStyled() : background ? background : '';
                 }
             }
         });
@@ -159,7 +140,7 @@ class Widget {
             set: function (aValue) {
                 if (foreground !== aValue) {
                     foreground = aValue;
-                    box.style.color = foreground && foreground.toStyled ? foreground.toStyled() : foreground;
+                    box.style.color = foreground && foreground.toStyled ? foreground.toStyled() : foreground ? foreground : '';
                 }
             }
         });

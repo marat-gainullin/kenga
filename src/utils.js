@@ -329,32 +329,35 @@ Object.defineProperty(module, 'absoluteTop', {
 });
 
 ((() => {
-    let menuSession = null;
+    let popupSession = null;
     let mouseDownReg = null;
 
-    function startMenuSession(menu) {
-        function isOutsideOfAnyMenu(anElement) {
+    function startPopupSession(popup) {
+        function isOutsideOfAnyPopup(anElement) {
             let currentElement = anElement;
-            while (currentElement !== null && !currentElement.classList.contains('p-menu') && currentElement !== document.body)
+            while (
+                currentElement !== null && currentElement !== document.body &&
+                !currentElement.classList.contains('p-menu') && !currentElement.classList.contains('p-popup')
+                )
                 currentElement = currentElement.parentElement;
             return currentElement === document.body || currentElement === null;
         }
 
-        if (menuSession !== menu) {
-            closeMenuSession();
-            menuSession = menu;
+        if (popupSession !== popup) {
+            closePopupSession();
+            popupSession = popup;
             mouseDownReg = on(document, Events.MOUSEDOWN, evt => {
-                if (isOutsideOfAnyMenu(evt.target)) {
-                    closeMenuSession();
+                if (isOutsideOfAnyPopup(evt.target)) {
+                    closePopupSession();
                 }
             }, true);
         }
     }
 
-    function closeMenuSession() {
-        if (menuSession) {
-            menuSession.close();
-            menuSession = null;
+    function closePopupSession() {
+        if (popupSession) {
+            popupSession.close();
+            popupSession = null;
         }
         if (mouseDownReg) {
             mouseDownReg.removeHandler();
@@ -362,23 +365,38 @@ Object.defineProperty(module, 'absoluteTop', {
         }
     }
 
-    function isMenuSession() {
-        return !!menuSession;
+    function isPopupSession() {
+        return !!popupSession;
     }
 
     Object.defineProperty(module, 'startMenuSession', {
         get: function () {
-            return startMenuSession;
+            return startPopupSession;
+        }
+    });
+    Object.defineProperty(module, 'startPopupSession', {
+        get: function () {
+            return startPopupSession;
         }
     });
     Object.defineProperty(module, 'closeMenuSession', {
         get: function () {
-            return closeMenuSession;
+            return closePopupSession;
+        }
+    });
+    Object.defineProperty(module, 'closePopupSession', {
+        get: function () {
+            return closePopupSession;
         }
     });
     Object.defineProperty(module, 'isMenuSession', {
         get: function () {
-            return isMenuSession;
+            return isPopupSession;
+        }
+    });
+    Object.defineProperty(module, 'isPopupSession', {
+        get: function () {
+            return isPopupSession;
         }
     });
 })());
