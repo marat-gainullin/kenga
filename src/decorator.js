@@ -6,20 +6,21 @@ function Decorator() {
     this.element.classList.add('p-decorator');
 
     let nullable = true;
-    let selector = null;
+    let onValueSelect = null;
 
     const btnClear = document.createElement('div');
     btnClear.className = 'p-decoration p-clear';
     Ui.on(btnClear, Ui.Events.CLICK, evt => {
         evt.stopPropagation();
         self.value = null;
+        self.focus();
     });
 
     const btnSelect = document.createElement('div');
     btnSelect.className = 'p-decoration p-select';
     Ui.on(btnSelect, Ui.Events.CLICK, evt => {
         evt.stopPropagation();
-        selector.call(self, self);
+        onValueSelect.call(self, self);
     });
 
     function redecorate() {
@@ -30,14 +31,14 @@ function Decorator() {
             self.element.removeChild(btnClear);
         if (btnSelect.parentNode === self.element)
             self.element.removeChild(btnSelect);
-        if (nullable && selector) {
+        if (nullable && onValueSelect) {
             self.element.classList.add('p-decorator-nullable-selectable');
             self.element.appendChild(btnClear);
             self.element.appendChild(btnSelect);
         } else if (nullable) {
             self.element.classList.add('p-decorator-nullable');
             self.element.appendChild(btnClear);
-        } else if (selector) {
+        } else if (onValueSelect) {
             self.element.classList.add('p-decorator-selectable');
             self.element.appendChild(btnSelect);
         }
@@ -55,17 +56,28 @@ function Decorator() {
             }
         }
     });
-    Object.defineProperty(this, 'selector', {
+    Object.defineProperty(this, 'onValueSelect', {
         get: function() {
-            return selector;
+            return onValueSelect;
         },
         set: function(aValue) {
-            if (selector !== aValue) {
-                selector = aValue;
+            if (onValueSelect !== aValue) {
+                onValueSelect = aValue;
                 redecorate();
             }
         }
     });
 
+    Object.defineProperty(this, 'selector', {
+        get: function() {
+            return btnSelect;
+        }
+    });
+
+    Object.defineProperty(this, 'clearer', {
+        get: function() {
+            return btnClear;
+        }
+    });
 }
 export default Decorator;
