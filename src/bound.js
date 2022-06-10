@@ -35,7 +35,7 @@ function getPathData(anElement, aPath) {
 }
 
 function setPathData(anElement, aPath, aValue) {
-    if (aPath) {
+    if (anElement && aPath) {
         let target = anElement;
         const path = aPath.split('.');
         let propName = path[0];
