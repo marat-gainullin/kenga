@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rimraf ./build",
     "lib": "rollup -c rollup.lib.config.js",
-    "test": "rollup -c rollup.test.config.js"
+    "test": "rollup -c rollup.test.config.js",
     "upload": "rimraf ./build & rollup -c rollup.lib.config.js & npm publish ./build/lib"
   },
   "dependencies": {
