@@ -78,8 +78,8 @@ class Widget {
         Object.defineProperty(this, 'name', {
             get: function () {
                 return name;
-                set: function (aValue) {
             },
+            set: function (aValue) {
                 name = aValue;
                 self.element.name = name;
             }
