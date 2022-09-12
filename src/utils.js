@@ -163,9 +163,9 @@ const throttle = ((() => {
             action();
         }
 
-        if (timeout < 1) // ms
-            action();
-        else {
+        if (timeout < 1) { // ms
+            action()
+        } else {
             if (!watchdog) {
                 delayed(timeout, invoked);
                 watchdog = invoked;
