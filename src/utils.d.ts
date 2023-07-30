@@ -69,6 +69,7 @@ declare namespace Utils {
     MOUSEDOWN = 'mousedown',
     MOUSEMOVE = 'mousemove',
     MOUSEOUT = 'mouseout',
+    MOUSELEAVE = 'mouseleave',
     MOUSEOVER = 'mouseover',
     MOUSEUP = 'mouseup',
     MOUSEWHEEL = 'mousewheel',

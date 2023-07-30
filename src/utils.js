@@ -35,6 +35,7 @@ const Events = {
     MOUSEDOWN: 'mousedown',
     MOUSEMOVE: 'mousemove',
     MOUSEOUT: 'mouseout',
+    MOUSELEAVE: 'mouseleave',
     MOUSEOVER: 'mouseover',
     MOUSEUP: 'mouseup',
     MOUSEWHEEL: 'mousewheel',
@@ -47,33 +48,11 @@ const Events = {
 };
 
 function absoluteLeft(elem) {
-    let left = 0;
-    let curr = elem;
-    // This intentionally excludes body which has a null offsetParent.
-    while (curr.offsetParent) {
-        left -= curr.offsetParent.scrollLeft;
-        curr = curr.parentNode;
-    }
-    while (elem) {
-        left += elem.offsetLeft;
-        elem = elem.offsetParent;
-    }
-    return left;
+    return elem.getBoundingClientRect().x;
 }
 
 function absoluteTop(elem) {
-    let top = 0;
-    let curr = elem;
-    // This intentionally excludes body which has a null offsetParent.
-    while (curr.offsetParent) {
-        top -= curr.offsetParent.scrollTop;
-        curr = curr.parentNode;
-    }
-    while (elem) {
-        top += elem.offsetTop;
-        elem = elem.offsetParent;
-    }
-    return top;
+  return elem.getBoundingClientRect().y;
 }
 
 function on(element, eventName, handler, capturePhase) {
