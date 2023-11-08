@@ -29,7 +29,7 @@ class BoxField extends Widget {
                 return box.placeholder;
             },
             set: function (aValue) {
-                box.placeholder = aValue;
+                box.placeholder = aValue == null ? '' : aValue;
             }
         });
 
@@ -315,4 +315,3 @@ class BoxField extends Widget {
 }
 
 export default BoxField;
-       

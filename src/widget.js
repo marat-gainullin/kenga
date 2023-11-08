@@ -25,7 +25,6 @@ class Widget {
         let background = null;
         let foreground = null;
         let cursor;
-        let toolTipText;
         let focusable = false;
         let font = null;
 
@@ -82,14 +81,6 @@ class Widget {
             set: function (aValue) {
                 name = aValue;
                 self.element.name = name;
-            }
-        });
-        Object.defineProperty(this, 'title', {
-            get: function () {
-                return box.title;
-            },
-            set: function (aValue) {
-                box.title = aValue;
             }
         });
         Object.defineProperty(this, 'font', {
@@ -150,7 +141,7 @@ class Widget {
             },
             set: function (aValue) {
                 cursor = aValue;
-                box.style.cursor = cursor;
+                box.style.cursor = cursor == null ? '' : cursor;
             }
         });
 
@@ -165,14 +156,23 @@ class Widget {
                 }
             }
         });
-        Object.defineProperty(this, 'toolTipText', {
+        Object.defineProperty(this, 'title', {
             get: function () {
-                return toolTipText;
+                return box.title;
             },
             set: function (aValue) {
-                if (toolTipText !== aValue) {
-                    toolTipText = aValue;
-                    box.title = toolTipText;
+              if (box.title != aValue) {
+                box.title = aValue == null ? '' : value;
+              }
+            }
+        });
+        Object.defineProperty(this, 'toolTipText', {
+            get: function () {
+              return box.title;
+            },
+            set: function (aValue) {
+                if (box.title != aValue) {
+                  box.title = aValue == null ? '' : value;
                 }
             }
         });
@@ -244,7 +244,7 @@ class Widget {
                     else
                         shell.style.top = `${aValue}px`;
                 } else {
-                    shell.style.top = null;
+                    shell.style.top = '';
                 }
             }
         });
@@ -265,7 +265,7 @@ class Widget {
                         shell.style.width = `${aValue}px`;
                     }
                 } else {
-                    shell.style.width = null;
+                    shell.style.width = '';
                 }
             }
         });
@@ -286,7 +286,7 @@ class Widget {
                         shell.style.height = `${aValue}px`;
                     }
                 } else {
-                    shell.style.height = null;
+                    shell.style.height = '';
                 }
             }
         });
