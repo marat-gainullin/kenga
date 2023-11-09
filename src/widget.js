@@ -162,7 +162,7 @@ class Widget {
             },
             set: function (aValue) {
               if (box.title != aValue) {
-                box.title = aValue == null ? '' : value;
+                box.title = aValue == null ? '' : aValue;
               }
             }
         });
@@ -172,7 +172,7 @@ class Widget {
             },
             set: function (aValue) {
                 if (box.title != aValue) {
-                  box.title = aValue == null ? '' : value;
+                  box.title = aValue == null ? '' : aValue;
                 }
             }
         });

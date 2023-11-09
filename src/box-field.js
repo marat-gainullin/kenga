@@ -48,10 +48,12 @@ class BoxField extends Widget {
         function validate() {
             if (self.checkValidity) {
                 if (self.checkValidity()) {
+                    shell.classList.remove('p-invalid')
                     if (self.hideError) {
                         self.hideError();
                     }
                 } else {
+                    shell.classList.add('p-invalid')
                     const message = self.error ? self.error : (self.formatError ? self.formatError() : null)
                     if (message && self.showError) {
                         self.showError(message);
@@ -65,11 +67,11 @@ class BoxField extends Widget {
         this.validateOnInput = true;
 
         const changeReg = Ui.on(box, Ui.Events.CHANGE, evt => {
-            if (self.validate) {
-                self.validate();
-            }
             if (self.textChanged) {
                 self.textChanged();
+            }
+            if (self.validate) {
+              self.validate();
             }
         });
 
@@ -80,12 +82,15 @@ class BoxField extends Widget {
         });
 
         const inputReg = Ui.on(box, Ui.Events.INPUT, evt => {
-            if (self.validateOnInput) {
-                if (self.validate) {
-                    self.validate();
-                }
-            }
             fireTextChanged(box.value)
+            if (self.validateOnInput) {
+              if (self.textChanged) {
+                self.textChanged();
+              }
+              if (self.validate) {
+                self.validate();
+              }
+            }
         });
 
         function hideError() {
@@ -114,7 +119,9 @@ class BoxField extends Widget {
                     shell.appendChild(errorPopup);
                 }
                 Ui.later(() => {
-                    errorPopup.className += ' p-error-popup-shown';
+                    if (errorPopup) {
+                        errorPopup.classList.add('p-error-popup-shown');
+                    }
                 });
             } else {
                 errorPopup.innerText = errorText;
@@ -204,6 +211,9 @@ class BoxField extends Widget {
         });
 
         function fireValueChanged(oldValue) {
+            if (self.validate) {
+              self.validate()
+            }
             const event = new ValueChangeEvent(self, oldValue, self.value);
             valueChangeHandlers.forEach(h => {
                 Ui.later(() => {
