@@ -1,5 +1,3 @@
-import Color from './color';
-import Cursor from './cursor';
 import Font from './font';
 
 const global = window;
@@ -106,7 +104,7 @@ function selectColor(onSelection, oldValue) {
     if (oldValue)
         colorField.value = `${oldValue}`;
     on(colorField, 'change', () => {
-        onSelection(new Color(colorField.value));
+        onSelection(colorField.value);
     });
     colorField.click();
     return colorField;
@@ -228,18 +226,6 @@ Object.defineProperty(module, 'delayed', {
 Object.defineProperty(module, 'throttle', {
     enumerable: true,
     value: throttle
-});
-Object.defineProperty(module, 'Colors', {
-    enumerable: true,
-    value: Color
-});
-Object.defineProperty(module, 'Color', {
-    enumerable: true,
-    value: Color
-});
-Object.defineProperty(module, 'Cursor', {
-    enumerable: true,
-    value: Cursor
 });
 Object.defineProperty(module, 'Font', {
     enumerable: true,

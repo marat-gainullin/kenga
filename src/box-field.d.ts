@@ -27,6 +27,6 @@ export default class BoxField extends Widget {
   addKeyPressHandler(handler: (evt: KeyEvent) => void): { removeHandler: () => void };
   addKeyReleaseHandler(handler: (evt: KeyEvent) => void): { removeHandler: () => void };
 
-  fireValueChanged(): void;
+  fireValueChanged(oldValue: any): void;
   addValueChangeHandler(handler: (evt: ValueChangeEvent) => void): { removeHandler: () => void };
 }

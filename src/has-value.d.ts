@@ -5,5 +5,5 @@ export default interface HasValue {
   value: any
   onValueChange: (evt: ValueChangeEvent) => void
   addValueChangeHandler: (handler: (evt: ValueChangeEvent) => void) => { removeHandler: () => void }
-  fireValueChanged(): void
+  fireValueChanged(oldValue: any): void
 }

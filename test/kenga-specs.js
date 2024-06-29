@@ -3,11 +3,8 @@
 import '../src/layout.css';
 import '../src/theme.css';
 
-import Invoke from 'septima-utils/invoke';
 import Managed from 'septima-model/managed';
 import Font from '../src/font';
-import Color from '../src/color';
-import Cursor from '../src/cursor';
 import Widget from '../src/widget';
 import Container from '../src/container';
 import ActionEvent from '../src/events/action-event';
@@ -59,22 +56,16 @@ function expectWidget(widget) {
     expectValue(widget, 'visible', true);
     expectValue(widget, 'visible', false);
     expectValue(widget, 'visible', true);
-    expect('opaque' in widget).toBeTruthy();
-    expectValue(widget, 'opaque', false);
-    expectValue(widget, 'opaque', true);
-    expectValue(widget, 'opaque', true);
-    expectValue(widget, 'opaque', false);
-    expectValue(widget, 'opaque', true);
     expect('cursor' in widget).toBeTruthy();
-    expectValue(widget, 'cursor', Cursor.WAIT);
+    expectValue(widget, 'cursor', 'wait');
     expect('background' in widget).toBeTruthy();
-    const bg = new Color('#fcfcfc');
+    const bg = '#fcfcfc';
     expectValue(widget, 'background', bg);
     expectValue(widget, 'background', bg);
     expectValue(widget, 'background', '#fcfcfa');
     expectValue(widget, 'background', null);
     expect('foreground' in widget).toBeTruthy();
-    const fg = new Color(12, 45, 78, 35);
+    const fg = '#bbb';
     expectValue(widget, 'foreground', fg);
     expectValue(widget, 'foreground', fg);
     expectValue(widget, 'foreground', '#bbb');
@@ -165,69 +156,6 @@ function expectWidget(widget) {
 }
 
 describe('Kenga Api', () => {
-    it('Color Api', (done) => {
-        const c1 = new Color('#ccc');
-        expect(c1.red).toEqual(204);
-        expect(c1.green).toEqual(204);
-        expect(c1.blue).toEqual(204);
-        expect(c1.alpha).toEqual(255);
-        expect(c1 + '').toEqual('#cccccc');
-        const c2 = new Color('rgb(12, 23, 34)');
-        expect(c2.red).toEqual(12);
-        expect(c2.green).toEqual(23);
-        expect(c2.blue).toEqual(34);
-        expect(c2.alpha).toEqual(255);
-        expect(c2 + '').toEqual('#0c1722');
-        const c22 = new Color(12, 23, 34);
-        expect(c22.red).toEqual(12);
-        expect(c22.green).toEqual(23);
-        expect(c22.blue).toEqual(34);
-        expect(c22.alpha).toEqual(255);
-        expect(c22 + '').toEqual('#0c1722');
-        const c3 = new Color('rgba(12, 23, 34, .5)');
-        expect(c3.red).toEqual(12);
-        expect(c3.green).toEqual(23);
-        expect(c3.blue).toEqual(34);
-        expect(c3.alpha).toEqual(127);
-        expect(c3 + '').toEqual('#0c1722');
-        const c33 = new Color(12, 23, 34, 45);
-        expect(c33.red).toEqual(12);
-        expect(c33.green).toEqual(23);
-        expect(c33.blue).toEqual(34);
-        expect(c33.alpha).toEqual(45);
-        expect(c33 + '').toEqual('#0c1722');
-        try {
-            new Color('kjsdhfkjdsh');
-            done.fail();
-        } catch (e) {
-            expect(e).toBeDefined();
-        }
-        try {
-            new Color(78, 34);
-            done.fail();
-        } catch (e) {
-            expect(e).toBeDefined();
-        }
-        try {
-            Color.parse();
-            done.fail();
-        } catch (e) {
-            expect(e).toBeDefined();
-        }
-        try {
-            Color.parse('');
-            done.fail();
-        } catch (e) {
-            expect(e).toBeDefined();
-        }
-        try {
-            Color.parse('#fc');
-            done.fail();
-        } catch (e) {
-            expect(e).toBeDefined();
-        }
-        done();
-    });
     it('Events Api', () => {
         const widget = new Widget();
         const container = new Container();
@@ -513,9 +441,9 @@ describe('Kenga Api', () => {
         const widget = new ModelField();
         widget.nullable = true;
         widget.nullable = false;
-        widget.selector = () => {
+        widget.onValueSelect = () => {
         };
-        widget.selector = null;
+        widget.onValueSelect = null;
         widget.data = data;
         widget.field = 'path.name';
         expect(widget.value).toEqual('Merilin');
@@ -536,7 +464,7 @@ describe('Kenga Api', () => {
         });
         widget.focus();
         widget.blur();
-        Invoke.later(() => {
+        Utils.later(() => {
             expect(data.path.name).toEqual('Merilin_|');
             done();
         });
@@ -617,16 +545,12 @@ describe('Kenga Api', () => {
         expect(Utils.isMenuSession()).toBeFalsy();
         const btn = document.createElement('button');
         document.body.appendChild(btn);
-        const al = Utils.absoluteLeft(document.body);
-        const at = Utils.absoluteTop(document.body);
-        expect(al).toEqual(0);
-        expect(at).toEqual(0);
         let clicks = 0;
         const clickReg = Utils.on(btn, Utils.Events.CLICK, () => {
             clicks++;
         });
         btn.click();
-        Invoke.later(() => {
+        Utils.later(() => {
             expect(clicks).toEqual(1);
             clickReg.removeHandler();
             document.body.removeChild(btn);

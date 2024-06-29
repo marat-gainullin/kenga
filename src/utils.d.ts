@@ -17,26 +17,6 @@ declare namespace Utils {
   function selectFile(onSelection: (selected: File) => void, fileFilter: string): void;
   function selectColor(onSelection: (selected: any) => void, oldValue: any): void;
 
-  enum Cursor {
-    CROSSHAIR = "crosshair",
-    DEFAULT = "default",
-    AUTO = "auto",
-    E_RESIZE = "e-resize",
-    // help ?
-    // progress ?
-    HAND = "pointer",
-    MOVE = "move",
-    NE_RESIZE = "ne-resize",
-    NW_RESIZE = "nw-resize",
-    N_RESIZE = "n-resize",
-    SE_RESIZE = "se-resize",
-    SW_RESIZE = "sw-resize",
-    S_RESIZE = "s-resize",
-    TEXT = "text",
-    WAIT = "wait",
-    W_RESIZE = "w-resize"
-  }
-
   enum Events {
     BLUR = 'blur',
     CANPLAYTHROUGH = 'canplaythrough',

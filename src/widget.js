@@ -974,4 +974,4 @@ class Widget {
     }
 }
 
-export default Widget;
+export default Widget; /* change to export = Widget upon migration to TS if somebody needs pure ES6 default export. */

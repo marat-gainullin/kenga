@@ -34,7 +34,7 @@ class BoxField extends Widget {
         });
 
         function checkValidity() {
-            return box.checkValidity();
+            return !!box.checkValidity ? box.checkValidity() : true;
         }
 
         this.checkValidity = checkValidity;

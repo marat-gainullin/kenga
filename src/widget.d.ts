@@ -26,6 +26,8 @@
     name: string;
     title: string;
     toolTipText: string;
+    background: string;
+    foreground: string;
     error: string;
     tabIndex: number;
     focusable: boolean;
@@ -40,6 +42,8 @@
      * It is used only when the widget is a child of a TabbedPane
      */
     tab: Tab;
+
+    constructor(box?: HTMLElement, shell?: HTMLElement)
 
     focus(): void;
     blur(): void;
