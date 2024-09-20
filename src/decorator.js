@@ -10,6 +10,7 @@ function Decorator() {
 
     const btnClear = document.createElement('div');
     btnClear.className = 'p-decoration p-clear';
+    btnClear.tabIndex = '1'
     Ui.on(btnClear, Ui.Events.CLICK, evt => {
         evt.stopPropagation();
         self.value = null;
@@ -17,6 +18,7 @@ function Decorator() {
     });
 
     const btnSelect = document.createElement('div');
+    btnSelect.tabIndex = '1'
     btnSelect.className = 'p-decoration p-select';
     Ui.on(btnSelect, Ui.Events.CLICK, evt => {
         evt.stopPropagation();

@@ -246,8 +246,8 @@ class BoxField extends Widget {
 
         Ui.on(box, Ui.Events.FOCUS, fireFocus);
 
-        function fireFocus() {
-            const event = new FocusEvent(self);
+        function fireFocus(evt) {
+            const event = new FocusEvent(self, evt);
             focusHandlers.forEach(h => {
                 Ui.later(() => {
                     h(event);
@@ -274,8 +274,8 @@ class BoxField extends Widget {
 
         Ui.on(box, Ui.Events.BLUR, fireBlur);
 
-        function fireBlur() {
-            const event = new BlurEvent(self);
+        function fireBlur(evt) {
+            const event = new BlurEvent(self, evt);
             focusLostHandlers.forEach(h => {
                 Ui.later(() => {
                     h(event);

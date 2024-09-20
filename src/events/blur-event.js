@@ -1,8 +1,8 @@
 import Event from '../event';
 
 class BlurEvent extends Event {
-    constructor(w) {
-        super(w, w);
+    constructor(w, event) {
+        super(w, w, event);
     }
 }
 
