@@ -302,7 +302,7 @@ Object.defineProperty(module, 'absoluteTop', {
             let currentElement = anElement;
             while (
                 currentElement !== null && currentElement !== document.body &&
-                !currentElement.classList.contains('p-menu') && !currentElement.classList.contains('p-popup')
+                !currentElement.classList.contains('p-popup')
                 )
                 currentElement = currentElement.parentElement;
             return currentElement === document.body || currentElement === null;
@@ -334,29 +334,14 @@ Object.defineProperty(module, 'absoluteTop', {
         return !!popupSession;
     }
 
-    Object.defineProperty(module, 'startMenuSession', {
-        get: function () {
-            return startPopupSession;
-        }
-    });
     Object.defineProperty(module, 'startPopupSession', {
         get: function () {
             return startPopupSession;
         }
     });
-    Object.defineProperty(module, 'closeMenuSession', {
-        get: function () {
-            return closePopupSession;
-        }
-    });
     Object.defineProperty(module, 'closePopupSession', {
         get: function () {
             return closePopupSession;
-        }
-    });
-    Object.defineProperty(module, 'isMenuSession', {
-        get: function () {
-            return isPopupSession;
         }
     });
     Object.defineProperty(module, 'isPopupSession', {

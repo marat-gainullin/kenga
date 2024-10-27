@@ -71,6 +71,7 @@
     right: 0px;
 }
 
-.p-error-popup {
+.p-error-popup,
+.p-popup {
     position: absolute;
 }
