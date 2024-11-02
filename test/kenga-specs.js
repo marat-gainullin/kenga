@@ -529,20 +529,20 @@ describe('Kenga Api', () => {
 
     it('Utils', (done) => {
         // Another menu fake
-        Utils.startMenuSession({
+        Utils.startPopupSession({
             close: function () {
             }
         });
-        expect(Utils.isMenuSession()).toBeTruthy();
+        expect(Utils.isPopupSession()).toBeTruthy();
         // Another menu fake
-        Utils.startMenuSession({
+        Utils.startPopupSession({
             close: function () {
             }
         });
-        expect(Utils.isMenuSession()).toBeTruthy();
-        Utils.closeMenuSession();
-        Utils.closeMenuSession();
-        expect(Utils.isMenuSession()).toBeFalsy();
+        expect(Utils.isPopupSession()).toBeTruthy();
+        Utils.closePopupSession();
+        Utils.closePopupSession();
+        expect(Utils.isPopupSession()).toBeFalsy();
         const btn = document.createElement('button');
         document.body.appendChild(btn);
         let clicks = 0;

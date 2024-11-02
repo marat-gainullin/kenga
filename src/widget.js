@@ -307,7 +307,7 @@ class Widget {
                             event.preventDefault();
                             event.stopPropagation();
                             if (contextMenu.showAt) {
-                                Ui.startMenuSession(contextMenu);
+                                Ui.startPopupSession(contextMenu);
                                 const pageX = 'pageX' in event ? event.pageX : event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
                                 const pageY = 'pageY' in event ? event.pageY : event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
                                 contextMenu.showAt(pageX, pageY);
