@@ -10,7 +10,7 @@ declare namespace Utils {
   function nextExtended(): string;
   function later(action: () => void): void;
   function delayed(timeout: number, action: () => void): void;
-  function throttle(timeout: number, action: () => void): void;
+  function throttleOf(timeout: number, action: () => void): () => void;
 
   function on(element: HTMLElement, eventName: string, handler: (evt: Event) => void, capturePhase?: boolean): { removeHandler: () => void };
 

@@ -50,7 +50,7 @@ function absoluteLeft(elem) {
 }
 
 function absoluteTop(elem) {
-  return elem.getBoundingClientRect().y;
+    return elem.getBoundingClientRect().y;
 }
 
 function on(element, eventName, handler, capturePhase) {
@@ -126,15 +126,14 @@ function delayed(timeout, action) {
     }, +timeout);
 }
 
-const throttle = ((() => {
+function throttleOf(timeout, action) {
+    if (arguments.length < 2)
+        throw "Missing Ui.throttleOf 'action' argument";
+    if (arguments.length < 1)
+        throw "Missing Ui.throttleOf 'timeout' argument";
     let watchdog = null;
 
-    function _throttle(timeout, action) {
-        if (arguments.length < 2)
-            throw "Missing Ui.throttle 'action' argument";
-        if (arguments.length < 1)
-            throw "Missing Ui.throttle 'timeout' argument";
-
+    function _throttle() {
         function invoked() {
             watchdog = null;
             action();
@@ -151,7 +150,7 @@ const throttle = ((() => {
     }
 
     return _throttle;
-})());
+};
 
 function now() {
     return new Date().valueOf();
@@ -223,9 +222,9 @@ Object.defineProperty(module, 'delayed', {
     enumerable: true,
     value: delayed
 });
-Object.defineProperty(module, 'throttle', {
+Object.defineProperty(module, 'throttleOf', {
     enumerable: true,
-    value: throttle
+    value: throttleOf
 });
 Object.defineProperty(module, 'Font', {
     enumerable: true,
@@ -303,7 +302,7 @@ Object.defineProperty(module, 'absoluteTop', {
             while (
                 currentElement !== null && currentElement !== document.body &&
                 !currentElement.classList.contains('p-popup')
-                )
+            )
                 currentElement = currentElement.parentElement;
             return currentElement === document.body || currentElement === null;
         }

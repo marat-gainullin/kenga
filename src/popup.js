@@ -2,7 +2,6 @@ import Ui from 'kenga/utils';
 
 class Popup {
     constructor(element) {
-        super();
         const self = this;
 
         this.element = element;
