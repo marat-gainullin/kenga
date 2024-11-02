@@ -1,6 +1,6 @@
 declare namespace Utils {
   function isPopupSession(): boolean;
-  function startPopupSession(): void;
+  function startPopupSession(popup: any): void;
   function closePopupSession(): void;
 
   function next(): number;
