@@ -81,6 +81,7 @@ class Popup {
                   }
                 }
                 tryToPlace(leftToRight, topToBottom)
+                fireShown()
             }
         }
         Object.defineProperty(this, 'showRelativeTo', {
@@ -113,6 +114,7 @@ class Popup {
             if (top + self.element.offsetHeight > window.innerHeight) {
                 self.element.style.top = `${top - self.element.offsetHeight}px`;
             }
+            fireShown()
         }
         Object.defineProperty(this, 'showAt', {
             get: function () {
@@ -139,11 +141,108 @@ class Popup {
         function close() {
             if (self.element.parentElement) {
                 self.element.parentElement.removeChild(self.element);
+                fireHidden()
             }
         }
         Object.defineProperty(this, 'close', {
             get: function () {
                 return close;
+            }
+        });
+
+        function fireShown() {
+            showHandlers.forEach(h => {
+                Ui.later(() => {
+                    h();
+                });
+            });
+        }
+
+        function fireHidden() {
+            hideHandlers.forEach(h => {
+                Ui.later(() => {
+                    h();
+                });
+            });
+        }
+
+        const hideHandlers = new Set();
+
+        function addHideHandler(handler) {
+            hideHandlers.add(handler);
+            return {
+                removeHandler: function () {
+                    hideHandlers.delete(handler);
+                }
+            };
+        }
+
+        const showHandlers = new Set();
+
+        function addShowHandler(handler) {
+            showHandlers.add(handler);
+            return {
+                removeHandler: function () {
+                    showHandlers.delete(handler);
+                }
+            };
+        }
+
+        Object.defineProperty(this, 'addHideHandler', {
+            get: function () {
+                return addHideHandler;
+            }
+        });
+        Object.defineProperty(this, 'addShowHandler', {
+            get: function () {
+                return addShowHandler;
+            }
+        });
+
+        let onShow;
+        let showReg;
+        Object.defineProperty(this, 'onShow', {
+            get: function () {
+                return onShow;
+            },
+            set: function (aValue) {
+                if (onShow !== aValue) {
+                    if (showReg) {
+                        showReg.removeHandler();
+                        showReg = null;
+                    }
+                    onShow = aValue;
+                    if (onShow) {
+                        showReg = addShowHandler(() => {
+                            if (onShow) {
+                                onShow();
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        let onHide;
+        let hideReg;
+        Object.defineProperty(this, 'onHide', {
+            get: function () {
+                return onHide;
+            },
+            set: function (aValue) {
+                if (onHide !== aValue) {
+                    if (hideReg) {
+                        hideReg.removeHandler();
+                        hideReg = null;
+                    }
+                    onHide = aValue;
+                    if (onHide) {
+                        hideReg = addHideHandler(() => {
+                            if (onHide) {
+                                onHide();
+                            }
+                        });
+                    }
+                }
             }
         });
     }

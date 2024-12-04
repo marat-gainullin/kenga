@@ -6,4 +6,10 @@ export default class Popup {
   popupAt(left: number, top: number): void
   get shown(): boolean
   close(): void
+
+  addShowHandler(handler: () => void): { removeHandler: () => void };
+  onShow: () => void;
+
+  addHideHandler(handler: () => void): { removeHandler: () => void };
+  onHide: () => void;
 }
