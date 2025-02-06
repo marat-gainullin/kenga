@@ -534,6 +534,12 @@ class Widget {
             });
         }
 
+        Object.defineProperty(this, 'fireShown', {
+            get: function () {
+                return fireShown;
+            }
+        })
+        
         function fireHidden() {
             const event = new WidgetEvent(self);
             hideHandlers.forEach(h => {
@@ -542,6 +548,12 @@ class Widget {
                 });
             });
         }
+
+        Object.defineProperty(this, 'fireHidden', {
+            get: function () {
+                return fireHidden;
+            }
+        })
 
         let onAction;
         let actionReg;

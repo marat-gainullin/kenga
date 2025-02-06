@@ -78,9 +78,11 @@
 
     addShowHandler(handler: (evt: WidgetEvent) => void): { removeHandler: () => void };
     onShow: (evt: WidgetEvent) => void;
+    fireShown(): void
 
     addHideHandler(handler: (evt: WidgetEvent) => void): { removeHandler: () => void };
     onHide: (evt: WidgetEvent) => void;
+    fireHidden(): void
 
     onFocus: (evt: FocusEvent) => void;
     onFocusLost: (evt: BlurEvent) => void;
