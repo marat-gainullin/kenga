@@ -24,21 +24,22 @@ class Popup {
                 const targetLeft = Ui.absoluteLeft(anElement);
 
                 function tryToPlace(ltr, ttb) {
+                  self.element.style.left = ''
+                  self.element.style.right = ''
+                  self.element.style.top = ''
+                  self.element.style.bottom = ''
+                  self.element.style.overflowY = ''
                   if (horizontal) {
                       self.element.classList.remove('p-popup-horizontal-rel');
                       self.element.classList.add('p-popup-vertical-rel');
                       if (ttb) {
                           self.element.style.top = `${targetTop}px`;
-                          self.element.style.bottom = ''
                       } else {
-                          self.element.style.top = '';
                           self.element.style.bottom = `${document.body.clientHeight - targetTop - anElement.offsetHeight}px`;
                       }
                       if (ltr) {
                           self.element.style.left = `${targetLeft + anElement.offsetWidth}px`;
-                          self.element.style.right = '';
                       } else {
-                          self.element.style.left = '';
                           self.element.style.right = `${document.body.clientWidth - targetLeft}px`;
                       }
                   } else {
@@ -46,41 +47,55 @@ class Popup {
                       self.element.classList.add('p-popup-horizontal-rel');
                       if (ttb) {
                           self.element.style.top = `${targetTop + anElement.offsetHeight}px`;
-                          self.element.style.bottom = ''
                       } else {
-                          self.element.style.top = '';
                           self.element.style.bottom = `${document.body.clientHeight - targetTop}px`;
                       }
                       if (ltr) {
                           self.element.style.left = `${targetLeft}px`;
-                          self.element.style.right = '';
                       } else {
-                          self.element.style.left = '';
                           self.element.style.right = `${document.body.clientWidth - targetLeft - anElement.offsetWidth}px`;
                       }
                   }
                 }
-                tryToPlace(leftToRight, topToBottom)
                 document.body.appendChild(self.element);
-                if (topToBottom) {
-                  if (self.element.offsetTop + self.element.offsetHeight > document.body.clientHeight) {
-                    topToBottom = !topToBottom
-                  }
-                } else {
-                  if (self.element.offsetTop < 0) {
-                    topToBottom = !topToBottom
-                  }
+
+                tryToPlace(leftToRight, topToBottom);
+                const verticalOverflow1 = Math.max(0, (self.element.offsetTop + self.element.offsetHeight) - document.body.clientHeight)
+                const verticalUnderflow1 = Math.max(0, -self.element.offsetTop)
+                const verticalOverUnderFlow1 = verticalOverflow1 + verticalUnderflow1
+                let verticalOverUnderFlow2 = 0
+                if (verticalOverUnderFlow1 > 0) {
+                    tryToPlace(leftToRight, !topToBottom);
+                    const verticalOverflow2 = Math.max(0, (self.element.offsetTop + self.element.offsetHeight) - document.body.clientHeight)
+                    const verticalUnderflow2 = Math.max(0, -self.element.offsetTop)
+                    verticalOverUnderFlow2 = verticalOverflow2 + verticalUnderflow2
+                    if (verticalOverUnderFlow2 < verticalOverUnderFlow1) {
+                        topToBottom = !topToBottom
+                    }
                 }
+
                 if (leftToRight) {
-                  if (self.element.offsetLeft + self.element.offsetWidth > document.body.clientWidth) {
-                    leftToRight = !leftToRight
-                  }
+                    const horizontalOverflow = (self.element.offsetLeft + self.element.offsetWidth) - document.body.clientWidth
+                    if (horizontalOverflow > 0) {
+                        leftToRight = !leftToRight;
+                    }
                 } else {
-                  if (self.element.offsetLeft < 0) {
-                    leftToRight = !leftToRight
-                  }
+                    const horizontalUnderflow = -self.element.offsetLeft
+                    if (horizontalUnderflow > 0) {
+                        leftToRight = !leftToRight;
+                    }
                 }
-                tryToPlace(leftToRight, topToBottom)
+
+                tryToPlace(leftToRight, topToBottom);
+
+                if (verticalOverUnderFlow1 > 0 && verticalOverUnderFlow2 > 0) {
+                    if (topToBottom) {
+                        self.element.style.bottom = '0px'
+                    } else {
+                        self.element.style.top = '0px'
+                    }
+                    self.element.style.overflowY = 'auto'
+                }
                 fireShown()
             }
         }
